@@ -1,14 +1,15 @@
 // Seeks every frame at 30fps with Playwright and pipes PNG screenshots, in order, into ffmpeg (H.264 yuv420p).
 const {chromium}=require('playwright');const {spawn}=require('child_process');
-const FPS=30, DUR=41.0, W=4, OUT=process.argv[2]||'athangane-reel.mp4', AUDIO='audio.wav';
+const FPS=30, W=4, OUT=process.argv[2]||'athangane-reel.mp4', AUDIO='audio.wav', PREV=process.env.PREVIEW==='1';
 (async()=>{
-  const total=Math.round(FPS*DUR);
+  let DUR=0;
   const ff=spawn('ffmpeg',['-y','-v','error','-f','image2pipe','-framerate',String(FPS),'-c:v','png','-i','-','-i',AUDIO,
-    '-map','0:v','-map','1:a','-c:v','libx264','-preset','medium','-crf','17','-pix_fmt','yuv420p','-r',String(FPS),
+    '-map','0:v','-map','1:a','-c:v','libx264','-preset','medium','-crf',PREV?'24':'17','-pix_fmt','yuv420p','-r',String(FPS),
     '-c:a','aac','-b:a','256k','-movflags','+faststart','-shortest',OUT],{stdio:['pipe','inherit','inherit']});
   const browser=await chromium.launch();
   const pages=[];
-  for(let i=0;i<W;i++){const p=await browser.newPage({viewport:{width:1080,height:1920}});await p.goto('file://'+process.cwd()+'/index.html');await p.waitForFunction(()=>window.__ready);await p.evaluate(()=>window.__ready);pages.push(p)}
+  for(let i=0;i<W;i++){const p=await browser.newPage({viewport:{width:1080,height:1920},deviceScaleFactor:PREV?0.5:1});await p.goto('file://'+process.cwd()+'/index.html');await p.waitForFunction(()=>window.__ready);await p.evaluate(()=>window.__ready);pages.push(p)}
+  DUR=await pages[0].evaluate(()=>window.DURATION);const total=Math.round(FPS*DUR);console.log('duration',DUR,'frames',total);
   const jobs=new Map();let next=0;const t0=Date.now();
   const start=(idx)=>{const p=pages[idx%W];const prev=jobs.get(idx-W)||Promise.resolve();
     const job=prev.then(async()=>{await p.evaluate(t=>window.seek(t),idx/FPS);return p.screenshot({type:'png'})});jobs.set(idx,job);return job};
