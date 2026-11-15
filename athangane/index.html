@@ -33,6 +33,10 @@
   <linearGradient id="wetG" gradientUnits="userSpaceOnUse" x1="0" y1="1400" x2="0" y2="1700"><stop offset="0" stop-color="#4a3322" stop-opacity=".62"/><stop offset=".6" stop-color="#5b4130" stop-opacity=".38"/><stop offset="1" stop-color="#6b4f3a" stop-opacity="0"/></linearGradient>
   <linearGradient id="waterOverG" gradientUnits="userSpaceOnUse" x1="0" y1="1500" x2="0" y2="1820"><stop offset="0" stop-color="#7fd6cc" stop-opacity="0"/><stop offset=".35" stop-color="#6fcfc6" stop-opacity=".46"/><stop offset="1" stop-color="#a8ece0" stop-opacity=".62"/></linearGradient>
   <linearGradient id="trunkG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a3427"/><stop offset=".5" stop-color="#2b1e18"/><stop offset="1" stop-color="#1b130f"/></linearGradient>
+  <linearGradient id="fSkinG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e0aa82"/><stop offset="1" stop-color="#b9835a"/></linearGradient>
+  <linearGradient id="fSkinG2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c99169"/><stop offset="1" stop-color="#9c6a45"/></linearGradient>
+  <linearGradient id="sareeG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fcf3de"/><stop offset=".55" stop-color="#eee0c0"/><stop offset="1" stop-color="#cdbd98"/></linearGradient>
+  <linearGradient id="sareeG2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f3e6c8"/><stop offset="1" stop-color="#bfae88"/></linearGradient>
   <linearGradient id="furG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fffdf8"/><stop offset=".6" stop-color="#ece6da"/><stop offset="1" stop-color="#d4cbbd"/></linearGradient>
   <linearGradient id="redG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ef5c54"/><stop offset=".5" stop-color="#d9363c"/><stop offset="1" stop-color="#a42027"/></linearGradient>
   <linearGradient id="blkG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38363f"/><stop offset=".5" stop-color="#1b1a21"/><stop offset="1" stop-color="#0d0c10"/></linearGradient>
@@ -85,10 +89,11 @@
   <g id="shadows"></g>
   <g id="prints" fill="#7a5a40" opacity=".35"></g>
   <!-- FIGURES -->
-  <g id="otherG" opacity="0"></g>
-  <g id="seatG" opacity="0"></g>
+  <g id="panSeat" opacity="0"></g>
+  <g id="herSeat" opacity="0"></g>
   <g id="standRear"></g>
-  <g id="standProf" opacity="0"></g>
+  <g id="herStand" opacity="0"></g>
+  <g id="panStand" opacity="0"></g>
   <!-- FRONT WATER -->
   <g clip-path="url(#frontClip)"><path id="waterOver" d="" fill="url(#waterOverG)"/><g id="foamFront" fill="none" stroke-linecap="round"></g></g>
   <g id="palmsFront"></g>
@@ -256,64 +261,60 @@ function updCrows(t){crowDefs.forEach((c,i)=>{const k=(t-c.a)/(c.b-c.a);const vi
   c.o.wb.setAttribute('transform',`rotate(${f1(ang)})`);c.o.wf.setAttribute('transform',`scale(-.55 1) rotate(${f1(ang*.9)})`);
   c.o.wf.parentNode.setAttribute('transform','translate(0 2)')})}
 
-/* ======================== character : the panda ======================== */
-const BLK='#17151c';
+/* ======================== characters : the panda + "Meera" ======================== */
+const BLK='#17151c',GOLD='#d9a63a',HAIR='#0b0a10',BLOUSE='#1f7a5a';
+const rot=(p,c,a)=>{const r=a*Math.PI/180,dx=p[0]-c[0],dy=p[1]-c[1];return[c[0]+dx*Math.cos(r)-dy*Math.sin(r),c[1]+dx*Math.sin(r)+dy*Math.cos(r)]};
 function tubeD(a,b,w0,w1){const dx=b[0]-a[0],dy=b[1]-a[1];const L=Math.hypot(dx,dy)||1;const nx=-dy/L,ny=dx/L;
  return`M${f1(a[0]+nx*w0/2)} ${f1(a[1]+ny*w0/2)}L${f1(b[0]+nx*w1/2)} ${f1(b[1]+ny*w1/2)}L${f1(b[0]-nx*w1/2)} ${f1(b[1]-ny*w1/2)}L${f1(a[0]-nx*w0/2)} ${f1(a[1]-ny*w0/2)}Z`}
-// ---- panda head, profile facing left. origin = head centre ----
-function pandaHead(P,o){
- o=o||{};const fur=o.fur||'url(#furG)',ear=o.ear||BLK,patch=o.patch||BLK,muz=o.muzzle||'#fffdf8',nose=o.nose||'#0f0e13';
+/* ---------------- PANDA ---------------- */
+function pandaHead(P){
  return`<g id="${P}head">
-  <g id="${P}earG"><circle cx="16" cy="-66" r="30" fill="${ear}"/><circle cx="16" cy="-64" r="15" fill="${o.earIn||'#3a3742'}" opacity="${o.earInOp===undefined?.55:o.earInOp}"/>
-  <circle cx="-34" cy="-69" r="26" fill="${ear}" opacity=".94"/></g>
-  <circle cx="0" cy="0" r="73" fill="${fur}"/>
+  <g id="${P}earG"><circle cx="16" cy="-66" r="30" fill="${BLK}"/><circle cx="16" cy="-64" r="15" fill="#3a3742" opacity=".55"/><circle cx="-34" cy="-69" r="26" fill="${BLK}" opacity=".94"/></g>
+  <circle cx="0" cy="0" r="73" fill="url(#furG)"/>
   <path d="M34 -56C64 -28 68 22 40 58C54 20 50 -22 34 -56Z" fill="#c9c0b1" opacity=".5"/>
-  <ellipse cx="-60" cy="26" rx="38" ry="31" fill="${muz}"/>
-  <path d="M-56 -18C-66 4 -48 34 -24 28C-4 22 -4 -14 -16 -32C-28 -42 -48 -38 -56 -18Z" fill="${patch}"/>
+  <ellipse cx="-60" cy="26" rx="38" ry="31" fill="#fffdf8"/>
+  <path d="M-56 -18C-66 4 -48 34 -24 28C-4 22 -4 -14 -16 -32C-28 -42 -48 -38 -56 -18Z" fill="${BLK}"/>
   <ellipse id="${P}cheek" cx="-46" cy="24" rx="16" ry="10" fill="#ee8f87" opacity="0"/>
-  <ellipse id="${P}glow" cx="-50" cy="4" rx="34" ry="40" fill="url(#phoneGlow)" opacity="0"/>
   <ellipse id="${P}eyeW" cx="-36" cy="-2" rx="8.6" ry="9.5" fill="#fff"/>
   <circle id="${P}pup" cx="-37" cy="-2" r="5" fill="#0d0c10"/><circle id="${P}hl" cx="-35" cy="-4.6" r="1.9" fill="#fff"/>
-  <path id="${P}brow" d="" stroke="${o.brow||'#2b2931'}" stroke-width="5" stroke-linecap="round" fill="none"/>
-  <path d="M-108 6Q-98 -4 -84 4Q-82 18 -96 22Q-110 18 -108 6Z" fill="${nose}"/><ellipse cx="-97" cy="7" rx="5" ry="2.4" fill="#fff" opacity=".35"/>
+  <path id="${P}brow" d="" stroke="#2b2931" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M-108 6Q-98 -4 -84 4Q-82 18 -96 22Q-110 18 -108 6Z" fill="#0f0e13"/><ellipse cx="-97" cy="7" rx="5" ry="2.4" fill="#fff" opacity=".35"/>
+  <path id="${P}mo" d="" fill="#4a1620" opacity="0"/>
   <path id="${P}mouth" d="" stroke="#3a2428" stroke-width="3.4" stroke-linecap="round" fill="none"/>
-  ${o.extra||''}
  </g>`;
 }
-function updHead(P,st,t){
- const lid=st.lid,blink=(((t+P.length*.7)%3.6)<.12)?.1:1,sm_=st.smile,br=st.brow;
- const ry=Math.max(.8,9.5*(1-lid*.72)*blink*(1-Math.max(0,sm_)*.22));
+function updPandaHead(P,st,t){
+ const lid=st.lid,blink=(((t+P.length*.7)%3.6)<.12)?.1:1,sm_=st.smile,br=st.brow,op=st.open||0;
+ const ry=Math.max(.8,9.5*(1-lid*.72)*blink*(1-Math.max(0,sm_)*.22)*(1-op*.45));
  A_(P+'eyeW','ry',f1(ry));A_(P+'eyeW','cy',f1(-2+lid*3.5));
  A_(P+'pup','cx',f1(-37+st.gx));A_(P+'pup','cy',f1(-2+lid*3.5+st.gy));A_(P+'pup','r',f1(Math.min(5.2,ry*.9)));
  A_(P+'hl','cx',f1(-35+st.gx));A_(P+'hl','cy',f1(-4.6+lid*3.5+st.gy));A_(P+'hl','opacity',ry>3?1:0);
- const bi=-48-5*br-st.browLift,bo=-46+3.4*br-st.browLift;
+ const bi=-48-5*br-(st.browLift||0)-op*3,bo=-46+3.4*br-(st.browLift||0)-op*3;
  A_(P+'brow','d',`M-54 ${f1(bi)}Q-36 ${f1((bi+bo)/2-4)} -17 ${f1(bo)}`);
  A_(P+'mouth','d',`M-94 25Q-93 ${f1(40-2*sm_)} -78 ${f1(41-3*sm_)}Q-66 ${f1(42-4*sm_)} -55 ${f1(37-9*sm_)}`);
- A_(P+'cheek','opacity',f1(clamp(sm_)*.55+st.cheek));A_(P+'glow','opacity',f1(st.glow));
- const tw=Math.max(0,Math.sin(t*.9+P.length))**14;TR(P+'earG',`rotate(${f1(tw*6)} 16 -40)`);
+ A_(P+'mouth','opacity',op>.25?0:1);
+ A_(P+'mo','d',`M-93 26Q-74 ${f1(33-4*sm_)} -55 ${f1(37-9*sm_)}Q-70 ${f1(46+18*op)} -93 26Z`);A_(P+'mo','opacity',op>.1?1:0);
+ A_(P+'cheek','opacity',f1(clamp(sm_)*.55+(st.cheek||0)));
+ const tw=Math.max(0,Math.sin(t*.9+P.length))**14;TR(P+'earG',`rotate(${f1(tw*6)} 16 -40)`);TR(P+'head',`rotate(${f1(st.bow||0)} 20 50)`);
 }
-function armEls(P,o){o=o||{};return`<path id="${P}ua" fill="${o.sleeve||'url(#redG)'}"/><circle id="${P}ej" r="35" fill="${o.sleeve||'url(#redG)'}"/><path id="${P}fa" fill="${o.cuff||'url(#blkG)'}"/><ellipse id="${P}op" rx="41" ry="14" fill="#08070b"/><circle id="${P}hand" r="27" fill="${o.paw||'#17151c'}"/><g id="${P}phone"><rect x="-14" y="-27" width="28" height="50" rx="6" fill="#101014"/><rect x="-11.5" y="-24.5" width="23" height="45" rx="4" fill="#bcd8ff" id="${P}scr"/></g>`}
-function updArm(P,sh,e,w,phone,flare){
- flare=flare||1;
+function armEls(P,o){o=o||{};return`<path id="${P}ua" fill="${o.sleeve||'url(#redG)'}"/><circle id="${P}ej" r="35" fill="${o.sleeve||'url(#redG)'}"/><path id="${P}fa" fill="url(#blkG)"/><ellipse id="${P}op" rx="41" ry="14" fill="#08070b"/><circle id="${P}hand" r="27" fill="#17151c"/>`}
+function updArm(P,sh,e,w){
  A_(P+'ua','d',tubeD(sh,e,78,72));A_(P+'ej','cx',f1(e[0]));A_(P+'ej','cy',f1(e[1]));
  const dx=w[0]-e[0],dy=w[1]-e[1],L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
- const e2=[e[0]+ux*10,e[1]+uy*10];
- A_(P+'fa','d',tubeD(e2,w,78*flare,104*flare));
+ A_(P+'fa','d',tubeD([e[0]+ux*10,e[1]+uy*10],w,78,104));
  const ang=Math.atan2(dy,dx)*180/Math.PI;TR(P+'op',`translate(${f1(w[0])} ${f1(w[1])}) rotate(${f1(ang+90)})`);
- A_(P+'op','rx',f1(46*flare));
- const h=[w[0]+ux*22,w[1]+uy*22];A_(P+'hand','cx',f1(h[0]));A_(P+'hand','cy',f1(h[1]));
- TR(P+'phone',`translate(${f1(h[0]-(phone.dx||0))} ${f1(h[1]+(phone.dy||0))}) rotate(${f1(phone.rot||0)})`);A_(P+'phone','opacity',phone.vis);
+ A_(P+'hand','cx',f1(w[0]+ux*22));A_(P+'hand','cy',f1(w[1]+uy*22));
 }
-// ---- standing, seen from behind (3/4) ----
+// rear view (3/4 from behind)
 $('standRear').innerHTML=`<g id="srT"><g id="srI">
  <ellipse cx="-70" cy="-12" rx="52" ry="20" fill="#0c0b10"/><ellipse cx="70" cy="-12" rx="52" ry="20" fill="#0c0b10"/>
  <path d="M-124 -240C-150 -170 -148 -96 -132 -30L-6 -30C-2 -100 0 -170 -4 -240Z" fill="url(#blkG)"/>
  <path d="M124 -240C150 -170 148 -96 132 -30L6 -30C2 -100 0 -170 4 -240Z" fill="url(#blkG)"/>
  <path d="M-86 -220Q-96 -130 -88 -50M-40 -200Q-34 -120 -42 -60M86 -220Q96 -130 88 -50M40 -200Q34 -120 42 -60" stroke="#3b3945" stroke-width="3" fill="none" opacity=".7"/>
  <path d="M-132 -34H-6M132 -34H6" stroke="#2c2a33" stroke-width="6" opacity=".8"/>
- <g id="srArmL"><path d="M-112 -420L-150 -324L-120 -312L-86 -396Z" fill="url(#redG)"/><path d="M-150 -330C-172 -290 -178 -240 -176 -190L-104 -190C-108 -240 -108 -290 -118 -322Z" fill="url(#blkG)"/><ellipse cx="-140" cy="-186" rx="40" ry="13" fill="#08070b"/><circle cx="-140" cy="-170" r="27" fill="#17151c"/><g transform="translate(-140 -156) rotate(8)"><rect x="-11" y="-3" width="22" height="42" rx="5" fill="#101014"/><rect x="-9" y="-1" width="18" height="38" rx="3.5" fill="#2b2f3a"/></g></g>
+ <g id="srArmL"><path d="M-112 -420L-150 -324L-120 -312L-86 -396Z" fill="url(#redG)"/><path d="M-150 -330C-172 -290 -178 -240 -176 -190L-104 -190C-108 -240 -108 -290 -118 -322Z" fill="url(#blkG)"/><ellipse cx="-140" cy="-186" rx="40" ry="13" fill="#08070b"/><circle cx="-140" cy="-170" r="27" fill="#17151c"/></g>
  <g id="srArmR"><path d="M112 -420L150 -324L120 -312L86 -396Z" fill="url(#redG)"/><path d="M150 -330C172 -290 178 -240 176 -190L104 -190C108 -240 108 -290 118 -322Z" fill="url(#blkG)"/><ellipse cx="140" cy="-186" rx="40" ry="13" fill="#08070b"/><circle cx="140" cy="-170" r="27" fill="#17151c"/></g>
- <path id="srTee" d="M-112 -420C-50 -448 50 -448 112 -420C140 -340 146 -270 142 -206C70 -196 -70 -196 -142 -206C-146 -270 -140 -340 -112 -420Z" fill="url(#redG)"/>
+ <path d="M-112 -420C-50 -448 50 -448 112 -420C140 -340 146 -270 142 -206C70 -196 -70 -196 -142 -206C-146 -270 -140 -340 -112 -420Z" fill="url(#redG)"/>
  <path d="M0 -432Q4 -320 0 -204M-70 -380Q-84 -300 -78 -210M70 -380Q84 -300 78 -210" stroke="#a82229" stroke-width="3" fill="none" opacity=".75"/>
  <path d="M-142 -206C-70 -196 70 -196 142 -206L142 -216C70 -206 -70 -206 -142 -216Z" fill="#a82229" opacity=".7"/>
  <g id="srHead" transform="translate(0 -505)">
@@ -321,58 +322,145 @@ $('standRear').innerHTML=`<g id="srT"><g id="srI">
    <circle cx="0" cy="0" r="74" fill="url(#furG)"/>
    <path d="M-40 -64Q0 -80 40 -64" stroke="#fff" stroke-width="5" fill="none" opacity=".6"/>
    <ellipse cx="-66" cy="-6" rx="9" ry="24" fill="${BLK}"/><path d="M50 -50C74 -20 70 30 40 58C56 24 56 -16 50 -50Z" fill="#c9c0b1" opacity=".5"/>
-   <path d="M-22 40Q0 56 22 40" stroke="#d3cabb" stroke-width="4" fill="none" opacity=".6"/>
  </g>
 </g></g>`;
 function updRear(t){TR('srI',`translate(0 ${f1(Math.sin(t*2)*1.6)})`);TR('srHead',`translate(0 -505) rotate(${f1(Math.sin(t*.8)*1.6-2)} 0 60)`);
  TR('srArmL',`rotate(${f1(Math.sin(t*1.6)*1.2)} -112 -410)`);TR('srArmR',`rotate(${f1(Math.sin(t*1.6+1)*1.2)} 112 -410)`)}
-// ---- standing profile (faces left) ----
-$('standProf').innerHTML=`<g id="spT"><g id="spI">
- <path d="M-66 -240C-108 -178 -114 -100 -100 -34L52 -34C74 -96 76 -176 58 -240Z" fill="#0f0e13"/><ellipse cx="-96" cy="-16" rx="40" ry="17" fill="#0a090d"/>
- <path d="M-92 -246C-132 -180 -134 -96 -116 -30L70 -30C94 -92 104 -176 94 -246Z" fill="url(#blkG)"/>
- <path d="M-70 -200Q-92 -120 -80 -50M-20 -226Q-14 -130 -26 -54M30 -220Q50 -130 44 -54" stroke="#3d3b47" stroke-width="3.4" fill="none" opacity=".75"/>
- <path d="M-116 -34H70" stroke="#2c2a33" stroke-width="6" opacity=".8"/><ellipse cx="-86" cy="-14" rx="46" ry="19" fill="#17151c"/>
+// standing / walking profile (faces left)
+$('panStand').innerHTML=`<g id="spT"><g id="spI">
+ <g id="spFarLeg"><path d="M-66 -240C-108 -178 -114 -100 -100 -34L52 -34C74 -96 76 -176 58 -240Z" fill="#0f0e13"/><ellipse cx="-96" cy="-16" rx="40" ry="17" fill="#0a090d"/></g>
+ <g id="spNearLeg"><path d="M-92 -246C-132 -180 -134 -96 -116 -30L70 -30C94 -92 104 -176 94 -246Z" fill="url(#blkG)"/>
+  <path d="M-70 -200Q-92 -120 -80 -50M-20 -226Q-14 -130 -26 -54M30 -220Q50 -130 44 -54" stroke="#3d3b47" stroke-width="3.4" fill="none" opacity=".75"/>
+  <path d="M-116 -34H70" stroke="#2c2a33" stroke-width="6" opacity=".8"/><ellipse cx="-86" cy="-14" rx="46" ry="19" fill="#17151c"/></g>
  <path id="spTee" d="M-76 -432C-24 -450 64 -444 100 -410C128 -332 132 -262 128 -204C58 -194 -44 -194 -114 -206C-120 -266 -106 -352 -76 -432Z" fill="url(#redG)"/>
  <path d="M-114 -206C-44 -194 58 -194 128 -204L128 -214C58 -204 -44 -204 -114 -216Z" fill="#a82229" opacity=".7"/>
  <path d="M-70 -420Q-92 -330 -88 -250M30 -420Q46 -320 40 -220M-30 -380Q-20 -300 -34 -214" stroke="#a82229" stroke-width="3" fill="none" opacity=".65"/>
- <g transform="translate(-4 -508)">${pandaHead('sp_',{})}</g>
+ <g transform="translate(-4 -508)">${pandaHead('sp_')}</g>
  ${armEls('spA_')}
 </g></g>`;
-function updProf(t,st,pr,hold){
- const sh=[8,-408];
- const eH=[14,-316],wH=[0,-212],eR=[-32,-338],wR=[-96,-408];
- const e=[lerp(eH[0],eR[0],pr)+Math.sin(t*1.4)*1.2,lerp(eH[1],eR[1],pr)],wr=[lerp(wH[0],wR[0],pr),lerp(wH[1],wR[1],pr)+Math.sin(t*1.9)*1.5*pr];
- updArm('spA_',sh,e,wr,{vis:(pr>.02||hold)?1:0,rot:lerp(-6,-18,pr),dx:-2,dy:-6});
- A_('spA_scr','fill',pr>.7?'#d6e9ff':'#8fb4e6');
- const w=Math.sin(t*1.7)+.5*Math.sin(t*3.1+1);
- A_('spTee','d',`M-76 -432C-24 -450 64 -444 100 -410C128 -332 132 -262 ${f1(128+w*3)} ${f1(-204+w*2)}C58 ${f1(-194+w*3)} -44 ${f1(-194-w*3)} ${f1(-114-w*3)} -206C-120 -266 -106 -352 -76 -432Z`);
- TR('spI',`translate(0 ${f1(Math.sin(t*2)*1.3)})`);
- updHead('sp_',st,t);
+function updPanStand(t,st,o){
+ const sh=[8,-408],g=o.gesture||0,sw=-Math.sin(o.phi)*20*o.walk;
+ let e=[14,-316],w=[0,-212];const eR=[-32,-338],wR=[-96,-408];
+ e=[lerp(e[0],eR[0],g),lerp(e[1],eR[1],g)];w=[lerp(w[0],wR[0],g),lerp(w[1],wR[1],g)+Math.sin(t*5)*4*g];
+ e=rot(e,sh,sw);w=rot(w,sh,sw);updArm('spA_',sh,e,w);
+ const a=Math.sin(o.phi)*22*o.walk;TR('spNearLeg',`rotate(${f1(a)} 0 -246)`);TR('spFarLeg',`rotate(${f1(-a)} 0 -246)`);
+ const w2=Math.sin(t*1.7)+.5*Math.sin(t*3.1+1);
+ A_('spTee','d',`M-76 -432C-24 -450 64 -444 100 -410C128 -332 132 -262 ${f1(128+w2*3)} ${f1(-204+w2*2)}C58 ${f1(-194+w2*3)} -44 ${f1(-194-w2*3)} ${f1(-114-w2*3)} -206C-120 -266 -106 -352 -76 -432Z`);
+ TR('spI',`translate(0 ${f1(-Math.abs(Math.sin(o.phi))*5*o.walk+Math.sin(t*2)*1.3+(st.open||0)*Math.sin(t*15)*1.6)})`);
+ updPandaHead('sp_',st,t);
 }
-// ---- seated (profile facing left) : the panda, and a red panda beside it in the memory ----
+// seated panda (faces left)
 const seatGeom={hip:[40,-72],knee:[-92,-196],ankle:[-176,-46]};
-function seatedFig(P,o){
- return`<g id="${P}T"><g id="${P}I">
-  ${o.tail||''}
-  <path id="${P}thigh" fill="${o.trou}"/><path id="${P}shin" fill="${o.trou}"/><ellipse cx="-200" cy="-22" rx="46" ry="20" fill="${o.foot}"/>
-  <path id="${P}torso" fill="${o.shirt}" d="M-50 -304C6 -318 76 -302 96 -262C112 -200 116 -132 104 -74L-74 -66C-84 -140 -80 -236 -50 -304Z"/>
-  <path d="M30 -270Q44 -170 36 -80M-40 -250Q-34 -160 -44 -84" stroke="${o.fold}" stroke-width="3" fill="none" opacity=".7"/>
-  <g transform="translate(-6 -378)">${pandaHead(P,o.head)}</g>
-  ${armEls(P+'A_',o.arm)}
- </g></g>`}
-$('seatG').innerHTML=seatedFig('st_',{trou:'url(#blkG)',foot:'#17151c',shirt:'url(#redG)',fold:'#a82229',head:{},arm:{}});
-$('otherG').innerHTML=seatedFig('ot_',{trou:'#4f6149',foot:'#5a2d18',shirt:'url(#sageG)',fold:'#6f8561',
-  tail:'<path d="M92 -92C168 -110 214 -170 190 -250C176 -296 130 -300 112 -270" stroke="#b9571f" stroke-width="58" fill="none" stroke-linecap="round"/><path d="M92 -92C168 -110 214 -170 190 -250C176 -296 130 -300 112 -270" stroke="#7a3412" stroke-width="60" fill="none" stroke-dasharray="14 26" opacity=".85"/>',
-  head:{fur:'url(#rpG)',ear:'#b9571f',earIn:'#fff3e4',earInOp:.95,patch:'#6b2f12',muzzle:'#fff3e4',nose:'#1b1014',brow:'#5a2a12',
-   extra:'<path d="M-44 -50Q-30 -60 -14 -52Q-28 -46 -44 -50Z" fill="#fff3e4" opacity=".95"/><path d="M8 40Q22 52 34 38Q22 44 8 40Z" fill="#fff3e4" opacity=".9"/>'},
-  arm:{sleeve:'url(#sageG)',cuff:'#6b3a1e',paw:'#4a2410'}});
-function updSeat(P,t,st,mode,flare){
- const g=seatGeom;
- A_(P+'thigh','d',tubeD([g.hip[0]+8,g.hip[1]-14],g.knee,128,112));A_(P+'shin','d',tubeD(g.knee,g.ankle,112,98));
- const sh=[16,-284];const e=mode==='phone'?[-62,-176]:[-54,-160],wr=mode==='phone'?[-120,-206]:[-104,-186];
- updArm(P+'A_',sh,[e[0],e[1]+Math.sin(t*1.5)*1],[wr[0],wr[1]+Math.sin(t*1.5)*1],{vis:mode==='phone'?1:0,rot:-24,dx:2,dy:-4},flare);
- TR(P+'I',`translate(0 ${f1(Math.sin(t*1.9+(P==='ot_'?1:0))*1.2)})`);
- updHead(P,st,t);
+$('panSeat').innerHTML=`<g id="st_T"><g id="st_I">
+  <path id="st_thigh" fill="url(#blkG)"/><path id="st_shin" fill="url(#blkG)"/><ellipse cx="-200" cy="-22" rx="46" ry="20" fill="#17151c"/>
+  <path fill="url(#redG)" d="M-50 -304C6 -318 76 -302 96 -262C112 -200 116 -132 104 -74L-74 -66C-84 -140 -80 -236 -50 -304Z"/>
+  <path d="M30 -270Q44 -170 36 -80M-40 -250Q-34 -160 -44 -84" stroke="#a82229" stroke-width="3" fill="none" opacity=".7"/>
+  <g transform="translate(-6 -378)">${pandaHead('st_')}</g>
+  ${armEls('st_A_')}
+</g></g>`;
+function updPanSeat(t,st){
+ const g=seatGeom,op=st.open||0;
+ A_('st_thigh','d',tubeD([g.hip[0]+8,g.hip[1]-14],g.knee,128,112));A_('st_shin','d',tubeD(g.knee,g.ankle,112,98));
+ updArm('st_A_',[16,-284],[-58,-168+Math.sin(t*1.5)],[-112,-196+Math.sin(t*1.5)]);
+ TR('st_I',`translate(0 ${f1(Math.sin(t*1.9)*1.2+op*Math.sin(t*14)*2.4)}) rotate(${f1(op*Math.sin(t*9)*.8)} 20 -60)`);
+ updPandaHead('st_',st,t);
+}
+/* ---------------- MEERA (the woman) ---------------- */
+const SKIN_D='M-26 -60C-40 -52 -46 -38 -46 -24L-48 -12C-52 -2 -64 6 -66 10C-67 14 -62 17 -56 16C-54 17 -52 17 -52 18C-54 20 -56 23 -54 27C-52 29 -52 31 -50 33C-54 35 -54 38 -50 40C-50 44 -52 50 -46 56C-38 64 -22 64 -8 58L14 42C30 22 32 -20 24 -50C14 -62 -10 -66 -26 -60Z';
+function femHead(P){
+ let jas='';[[24,-62],[40,-54],[52,-38],[58,-18],[60,4],[60,26],[58,48]].forEach(([x,y])=>{jas+=`<g transform="translate(${x} ${y})"><circle r="6.4" fill="#fffdf4"/><circle r="2.2" fill="#f4d673"/><path d="M-4 -4L4 4M4 -4L-4 4" stroke="#e9e2cc" stroke-width="1.3"/></g>`});
+ return`<g id="${P}head">
+  <path id="${P}hairB" fill="${HAIR}"/>
+  <path d="M-6 44L26 36L36 112L-14 112Z" fill="url(#fSkinG2)"/>
+  <ellipse cx="12" cy="-2" rx="9" ry="14" fill="#c48a62"/><path d="M10 -9Q16 -3 10 4" stroke="#a86f4c" stroke-width="2" fill="none"/>
+  <circle cx="12" cy="16" r="4.4" fill="${GOLD}"/><path d="M12 19V30" stroke="${GOLD}" stroke-width="2.2"/><circle cx="12" cy="32" r="3.2" fill="${GOLD}"/>
+  <path d="${SKIN_D}" fill="url(#fSkinG)"/>
+  <ellipse id="${P}cheek" cx="-30" cy="22" rx="14" ry="9" fill="#e0705f" opacity="0"/>
+  <clipPath id="${P}ec"><path id="${P}ecp" d=""/></clipPath>
+  <path id="${P}ew" d="" fill="#fffaf2"/><circle id="${P}ir" cx="-33" cy="-11" r="4.2" fill="#2a160e" clip-path="url(#${P}ec)"/><circle id="${P}ih" cx="-31.5" cy="-12.6" r="1.5" fill="#fff" clip-path="url(#${P}ec)"/>
+  <path id="${P}lash" d="" stroke="#120b0c" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <path id="${P}brow" d="" stroke="#140d0d" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <circle cx="-47" cy="-25" r="3.2" fill="#c9262e"/>
+  <path d="M-60 14Q-57 11 -53 14" stroke="#9a6446" stroke-width="1.7" fill="none"/>
+  <path id="${P}mo" d="" fill="#5a1d26" opacity="0"/><path id="${P}teeth" d="" fill="#fffaf0" opacity="0"/>
+  <path id="${P}lip" d="" stroke="#c4555d" stroke-width="5.4" stroke-linecap="round" fill="none"/>
+  <path id="${P}crease" d="" stroke="#a96f4f" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0"/>
+  <path d="M-33 -52C-30 -88 14 -98 42 -70C58 -52 60 -10 52 22C46 -12 30 -38 8 -48C-6 -54 -20 -50 -33 -52Z" fill="${HAIR}"/>
+  <path d="M-38 -42C-33 -66 -4 -74 22 -60C2 -58 -16 -50 -30 -28C-35 -32 -38 -38 -38 -42Z" fill="${HAIR}"/>
+  <path d="M-30 -60C-26 -82 8 -92 32 -72" stroke="#ffb878" stroke-width="2.4" fill="none" opacity=".5"/>
+  <path d="M-8 -66C12 -72 34 -56 40 -30" stroke="#33313f" stroke-width="2" fill="none" opacity=".8"/>
+  <g id="${P}jas">${jas}</g>
+ </g>`;
+}
+function updFem(P,st,t){
+ const lid=st.lid,sm_=st.smile,op=st.open||0,br=st.brow,w=Math.sin(t*1.7)+.5*Math.sin(t*3.1+1);
+ const blink=(((t+P.length*.9)%3.9)<.12)?1:0;
+ let top=-19+lid*8+op*6,bot=-6-op*3;top=lerp(top,-9,blink);bot=lerp(bot,-8,blink);
+ const eyeD=`M-41 -11Q-33 ${f1(top)} -24 -11Q-33 ${f1(bot)} -41 -11Z`;
+ A_(P+'ecp','d',eyeD);A_(P+'ew','d',eyeD);A_(P+'lash','d',`M-43 -10Q-33 ${f1(top-1.6)} -22 -11M-42 -11L-46 -14`);
+ A_(P+'ir','cx',f1(-33+st.gx));A_(P+'ir','cy',f1(-11+st.gy));A_(P+'ih','cx',f1(-31.5+st.gx));A_(P+'ih','cy',f1(-12.6+st.gy));
+ const bi=-30-5*br-(st.browLift||0)-op*2,bo=-28+2.6*br-(st.browLift||0)-op*2;
+ A_(P+'brow','d',`M-47 ${f1(bi)}Q-34 ${f1((bi+bo)/2-6)} -19 ${f1(bo)}`);
+ const cy=29-7*sm_;
+ A_(P+'lip','d',`M-52 30Q-44 ${f1(31-2.2*sm_)} -37 ${f1(cy)}`);A_(P+'lip','opacity',op>.25?0:1);
+ A_(P+'mo','d',`M-52 28Q-44 ${f1(29-2*sm_)} -37 ${f1(28-7*sm_)}Q-44 ${f1(34+op*17)} -52 28Z`);A_(P+'mo','opacity',op>.1?1:0);
+ A_(P+'teeth','d',`M-50 28.6Q-44 ${f1(29.6-2*sm_)} -39 ${f1(28-6.4*sm_)}L-39.5 ${f1(31.5-5*sm_)}Q-44 ${f1(32.5)} -50 31.4Z`);A_(P+'teeth','opacity',op>.25?1:0);
+ A_(P+'crease','d',`M-34 ${f1(cy-5)}Q-29 ${f1(cy-12)} -34 ${f1(cy-19)}`);A_(P+'crease','opacity',f1(clamp(sm_+op*.5)*.9));
+ A_(P+'cheek','opacity',f1(clamp(sm_)*.5+(st.cheek||0)+op*.2));
+ A_(P+'hairB','d',`M30 -60C66 -50 72 0 62 40C76 100 ${f1(70+w*12)} 170 ${f1(60+w*22)} 232C${f1(42+w*20)} 242 ${f1(24+w*14)} 214 ${f1(22+w*10)} 190C18 120 14 60 22 20Z`);
+}
+function femArmEls(P){return`<path id="${P}ua" fill="url(#fSkinG)"/><path id="${P}sl" fill="${BLOUSE}"/><path id="${P}fa" fill="url(#fSkinG)"/><circle id="${P}hand" r="12.5" fill="url(#fSkinG)"/><circle id="${P}b1" r="5" fill="none" stroke="${GOLD}" stroke-width="3"/><circle id="${P}b2" r="5" fill="none" stroke="${GOLD}" stroke-width="3"/>`}
+function updFArm(P,sh,e,w){
+ A_(P+'ua','d',tubeD(sh,e,30,26));A_(P+'sl','d',tubeD(sh,[lerp(sh[0],e[0],.4),lerp(sh[1],e[1],.4)],38,34));
+ A_(P+'fa','d',tubeD(e,w,26,19));A_(P+'hand','cx',f1(w[0]));A_(P+'hand','cy',f1(w[1]+3));
+ const ux=w[0]-e[0],uy=w[1]-e[1],L=Math.hypot(ux,uy)||1;
+ A_(P+'b1','cx',f1(w[0]-ux/L*8));A_(P+'b1','cy',f1(w[1]-uy/L*8));A_(P+'b2','cx',f1(w[0]-ux/L*14));A_(P+'b2','cy',f1(w[1]-uy/L*14));
+}
+// standing / walking (faces left)
+$('herStand').innerHTML=`<g id="fsT"><g id="fsI">
+ <path id="fs_pallB" fill="url(#sareeG2)"/>
+ <path id="fs_skirt" fill="url(#sareeG)"/><path id="fs_border" fill="${GOLD}"/><path id="fs_border2" fill="none" stroke="#8a6212" stroke-width="2"/>
+ <path d="M-40 -280Q-52 -170 -60 -52M-12 -280Q-14 -170 -14 -52M16 -280Q24 -170 36 -52" stroke="#cdbd98" stroke-width="2.4" fill="none" opacity=".8"/>
+ <ellipse id="fs_ftF" rx="28" ry="9" fill="url(#fSkinG2)"/><ellipse id="fs_ftN" rx="28" ry="9" fill="url(#fSkinG)"/>
+ <path id="fs_blouse" d="M-26 -440C14 -446 38 -420 40 -380C42 -340 36 -312 30 -296L-30 -296C-36 -340 -34 -400 -26 -440Z" fill="${BLOUSE}"/>
+ <path d="M-26 -440C14 -446 38 -420 40 -380" stroke="#2a9a72" stroke-width="3" fill="none" opacity=".7"/>
+ <path d="M-30 -438C-10 -420 24 -360 40 -300L28 -296C10 -350 -16 -400 -34 -430Z" fill="url(#sareeG)" stroke="${GOLD}" stroke-width="2.4"/>
+ <g transform="translate(2 -520) scale(1.12)">${femHead('fs_h_')}</g>
+ ${femArmEls('fs_A_')}
+</g></g>`;
+function updFemStand(t,st,o){
+ const sw=Math.sin(o.phi)*o.walk,w=Math.sin(t*1.7)+.5*Math.sin(t*3.1+1),s6=sw*6;
+ A_('fs_skirt','d',`M-36 -300L40 -300C54 -220 ${f1(66+s6)} -110 ${f1(70+s6)} -24L${f1(-76+s6)} -24C-64 -110 -50 -220 -36 -300Z`);
+ A_('fs_border','d',`M${f1(-73+s6)} -54L${f1(69+s6)} -54L${f1(70+s6)} -24L${f1(-76+s6)} -24Z`);A_('fs_border2','d',`M${f1(-74+s6)} -44H${f1(70+s6)}`);
+ A_('fs_pallB','d',`M30 -436C${f1(60+w*8)} -380 ${f1(84+w*16)} -300 ${f1(96+w*22)} -190C${f1(80+w*18)} -170 ${f1(50+w*12)} -230 40 -300Z`);
+ const fx=sw*38,fl=Math.max(0,Math.cos(o.phi))*9*o.walk;
+ TR('fs_ftN',`translate(${f1(-30-fx)} ${f1(-9-Math.max(0,-Math.cos(o.phi))*9*o.walk)})`);TR('fs_ftF',`translate(${f1(-30+fx)} ${f1(-9-fl)})`);
+ const sh=[-4,-426],swing=-sw*18;let e=[4,-350],wr=[-6,-262];
+ if(o.gesture){e=[lerp(e[0],-30,o.gesture),lerp(e[1],-368,o.gesture)];wr=[lerp(wr[0],-60,o.gesture),lerp(wr[1],-340,o.gesture)+Math.sin(t*6)*4*o.gesture]}
+ updFArm('fs_A_',sh,rot(e,sh,swing),rot(wr,sh,swing));
+ TR('fsI',`translate(0 ${f1(-Math.abs(sw)*5+Math.sin(t*2.1)*1.2+(st.open||0)*Math.sin(t*15)*1.6)})`);
+ updFem('fs_h_',st,t);
+}
+// seated (faces left)
+$('herSeat').innerHTML=`<g id="fq_T"><g id="fq_I">
+ <path id="fq_thigh" fill="url(#sareeG)"/><path id="fq_shin" fill="url(#sareeG)"/><path id="fq_gb" fill="${GOLD}"/>
+ <ellipse cx="-184" cy="-20" rx="30" ry="10" fill="url(#fSkinG2)"/><ellipse cx="-160" cy="-12" rx="26" ry="9" fill="url(#fSkinG)"/>
+ <path d="M-24 -292C14 -296 38 -270 40 -236C44 -190 40 -140 34 -100L-30 -96C-36 -150 -34 -240 -24 -292Z" fill="${BLOUSE}"/>
+ <path d="M-34 -200C0 -190 36 -180 44 -120L44 -70L-34 -70Z" fill="url(#sareeG)" opacity=".95"/>
+ <path d="M-28 -290C-8 -270 22 -216 34 -150L22 -146C8 -200 -14 -250 -34 -280Z" fill="url(#sareeG)" stroke="${GOLD}" stroke-width="2.4"/>
+ <g transform="translate(-2 -352) scale(1.12)">${femHead('fq_h_')}</g>
+ ${femArmEls('fq_A_')}
+</g></g>`;
+const fSeatGeom={hip:[40,-56],knee:[-74,-170],ankle:[-156,-34]};
+function updFemSeat(t,st,o){
+ const g=fSeatGeom,op=st.open||0;
+ A_('fq_thigh','d',tubeD([g.hip[0]+6,g.hip[1]-10],g.knee,104,92));A_('fq_shin','d',tubeD(g.knee,g.ankle,92,66));
+ A_('fq_gb','d',tubeD([lerp(g.knee[0],g.ankle[0],.78),lerp(g.knee[1],g.ankle[1],.78)],g.ankle,70,64));
+ const sh=[2,-276],h=clamp(o.hand||0);
+ const e=[lerp(-30,-26,h),lerp(-190,-250,h)],wr=[lerp(-66,-66,h),lerp(-192,-318,h)+Math.sin(t*12)*3*op*h];
+ updFArm('fq_A_',sh,e,wr);
+ TR('fq_I',`translate(0 ${f1(Math.sin(t*2.1)*1.1+op*Math.sin(t*14+1)*2.6)}) rotate(${f1(op*Math.sin(t*9+1)*.9)} 20 -60)`);
+ updFem('fq_h_',st,t);
 }
 
 /* ======================== shadows, prints, grass, motes ======================== */
@@ -394,7 +482,7 @@ const LINES=[
  'ന്നിട്ട് ഒരു ദിവസം… വന്ന പോലെ തന്നെ പെട്ടെന്ന് അയാള് പോയി.',
  'ന്നാലും അയാള് എവിടെയായാലും സന്തോഷായിട്ടിരിക്കട്ടെ.',
  'അത്രയ്ക്ക് സ്നേഹിച്ചു പോയില്ലേ… ആ ഓർമ്മ അതങ്ങനെ കിടക്കട്ടെ.'];
-const CAP_X=66,CAP_Y=352,CAP_LH=92,CAP_FS=70,CAP_MAXW=730;
+const CAP_X=66,CAP_Y=352,CAP_LH=92,CAP_FS=70,CAP_MAXW=800;
 const capWords=[];
 function layoutCaptions(){
  const ui=$('ui');
@@ -422,37 +510,66 @@ function updCaps(t){
     it.t.setAttribute('transform',`translate(${f1(it.x)} ${f1(it.y+(1-e)*10)})`);it.t.setAttribute('opacity',f1(e))})})
 }
 
-/* ======================== state + timeline (all anchored to the voiceover's line onsets) ======================== */
-const S={camK:1,camX:540,camY:960,warm:0,dusk:0,phone:0,phoneHold:0,smile:0,lid:0,brow:0,gx:0,gy:0,browLift:0,glow:0,flash:0,otherA:0,sunY:880};
+/* ======================== story choreography : every beat is anchored to a spoken phrase ======================== */
+const V={turn0:AL(0,.25),arrive:AL(0,.8),sit:AN.flash,stand2:AL(2,.62),leave:AL(3,.5),cross0:AL(4,0),soften:AL(4,.62),recall:AL(5,.52)};
+V.turn1=V.turn0+.6;V.walkEnd=V.stand2+2.8;V.exitHer=V.leave+3.4;V.cross1=V.cross0+3.07;V.back=V.recall+1.4;window.V=V;
+const S={camK:1,camX:540,camY:960,warm:0,dusk:0,flash:0,sunY:880,
+ herX:-60,panX:700,hW:1,pW:0,pGest:0,
+ pSmile:0,pOpen:0,pLid:0,pBrow:0,pGx:0,pGy:0,pLift:0,pBow:0, hSmile:.35,hOpen:0,hLid:.1,hBrow:0,hGx:-1.5,hGy:0,hHand:0};
 const tl=gsap.timeline({paused:true,defaults:{ease:'power2.inOut'}});
 const D_=(a,b)=>Math.max(.05,b-a);
-// camera
-tl.to(S,{camK:1.08,camX:586,camY:1040,duration:AN.turn0,ease:'power1.inOut'},0);
-tl.to(S,{camK:1.5,camX:630,camY:1185,duration:D_(AN.turn0,AN.flash-.1),ease:'power2.inOut'},AN.turn0);
-tl.to(S,{camK:1.2,camX:420,camY:1330,duration:.01},AN.flash);
-tl.to(S,{camK:1.3,camX:650,camY:1260,duration:D_(AN.flash+.02,AN.wave-.3),ease:'power1.inOut'},AN.flash+.02);
-tl.to(S,{camK:1.3,camX:655,camY:1255,duration:D_(AN.wave-.3,AN.peak+.5),ease:'none'},AN.wave-.3);
-tl.to(S,{camK:1.7,camX:636,camY:1175,duration:D_(AN.peak+.5,AL(5,0)),ease:'power2.inOut'},AN.peak+.5);
-tl.to(S,{camK:1.0,camX:540,camY:960,duration:D_(AL(5,.12),DUR-.5),ease:'power2.inOut'},AL(5,.12));
-// sun sets slowly, dusk deepens
+// --- positions (leg phase is derived from x, so feet never slide) ---
+tl.to(S,{herX:462,duration:V.arrive,ease:"sine.out"},0);
+tl.to(S,{hW:0,duration:.35},V.arrive-.35);
+tl.to(S,{herX:400,duration:V.walkEnd-V.stand2,ease:'none'},V.stand2);
+tl.to(S,{hW:.55,pW:.55,duration:.01},V.stand2);tl.to(S,{hW:0,pW:0,duration:.01},V.walkEnd);
+tl.to(S,{panX:590,duration:V.walkEnd-V.stand2,ease:'none'},V.stand2);
+tl.to(S,{herX:-260,hW:1.15,duration:V.exitHer-V.leave,ease:'power1.in'},V.leave);
+tl.to(S,{hW:0,duration:.01},V.exitHer);
+tl.to(S,{herX:-100,duration:.01},V.cross0-.1);
+tl.to(S,{herX:1300,hW:1,duration:8.7,ease:'none'},V.cross0);
+tl.to(S,{panX:215,pW:.9,duration:V.cross1-V.cross0,ease:'none'},V.cross0);tl.to(S,{pW:0,duration:.01},V.cross1);
+// --- camera ---
+tl.to(S,{camK:1.04,camX:560,camY:990,duration:3.0,ease:'power1.inOut'},0);
+tl.to(S,{camK:1.25,camX:610,camY:1235,duration:D_(3.0,V.arrive+.4),ease:'power2.inOut'},3.0);
+tl.to(S,{camK:1.2,camX:600,camY:1345,duration:.9,ease:'power2.inOut'},V.sit-.2);
+tl.to(S,{camK:1.46,camX:600,camY:1330,duration:D_(V.sit+.7,V.stand2),ease:'power1.inOut'},V.sit+.7);
+tl.to(S,{camK:1.2,camX:560,camY:1210,duration:1.0,ease:'power2.inOut'},V.stand2-.1);
+tl.to(S,{camX:440,duration:D_(V.stand2+1,V.leave),ease:'none'},V.stand2+1);
+tl.to(S,{camK:1.12,camX:430,camY:1170,duration:1.4,ease:'power2.inOut'},V.leave-.5);
+tl.to(S,{camK:1.1,camX:430,camY:1130,duration:1.2,ease:'power2.inOut'},V.cross0-.4);
+tl.to(S,{camK:1.75,camX:240,camY:1150,duration:D_(V.cross1-.3,V.soften+.8),ease:'power2.inOut'},V.cross1-.3);
+tl.to(S,{camK:1.45,camX:236,camY:1075,duration:1.2,ease:'power2.inOut'},AL(5,0)-.2);
+tl.to(S,{camK:1.3,camX:620,camY:1182,duration:.01},V.recall);
+tl.to(S,{camK:1.45,camX:236,camY:1075,duration:.01},V.back);
+tl.to(S,{camK:1.0,camX:540,camY:960,duration:D_(V.back+.2,DUR-.9),ease:'power2.inOut'},V.back+.2);
+// sun sets slowly, dusk deepens; warm glow while they are close
 tl.to(S,{sunY:975,duration:DUR,ease:'none'},0);tl.to(S,{dusk:1,duration:DUR,ease:'none'},0);
-// memory warmth + flash
-tl.to(S,{warm:1,duration:.5},AN.flash);tl.to(S,{warm:0,duration:3.2},AN.wave+1.8);
-tl.fromTo(S,{flash:0},{flash:.9,duration:.22,ease:'power2.out',immediateRender:false},AN.flash-.15);tl.to(S,{flash:0,duration:.7},AN.flash+.07);
-// phone + expression
-tl.to(S,{phone:1,phoneHold:1,duration:1.3,ease:'power2.out'},AN.phone);
-tl.to(S,{phone:.1,duration:1.4},AL(4,0));
-tl.to(S,{glow:.28,duration:1.0},AN.turn1);tl.to(S,{glow:0,duration:.8},AN.flash-.6);
-tl.to(S,{smile:.62,duration:1.1},AN.turn1+.3);tl.to(S,{smile:.85,duration:1.2},AN.flash+1.0);tl.to(S,{smile:.7,duration:1.0},AL(2,.3));
-tl.to(S,{smile:.1,duration:1.4},AN.wave+.5);
-tl.to(S,{smile:-.55,brow:.9,lid:.35,duration:1.6},AN.peak+.7);
-tl.to(S,{smile:-.2,brow:.45,lid:.28,duration:1.8},AL(4,.3));
-tl.to(S,{smile:.18,brow:.05,lid:.18,duration:2.4,ease:'sine.inOut'},AL(4,.62));
-tl.to(S,{gx:-3.2,gy:-.4,duration:.9},AL(4,.12));
-tl.to(S,{lid:.12,smile:.22,duration:2.2},AL(5,.5));
-tl.to(S,{otherA:1,duration:.7},AN.flash+.45);tl.to(S,{otherA:0,duration:1.4,ease:'power1.in'},AN.wave+.4);
+tl.to(S,{warm:.8,duration:.6},V.sit);tl.to(S,{warm:0,duration:1.4},V.stand2);
+tl.to(S,{warm:1,duration:.3},V.recall);tl.to(S,{warm:0,duration:.8},V.back);
+[V.sit-.15,V.recall-.12,V.back-.12].forEach(a=>{tl.fromTo(S,{flash:0},{flash:.85,duration:.18,ease:'power2.out',immediateRender:false},a);tl.to(S,{flash:0,duration:.5},a+.18)});
+// --- expressions : panda ---
+tl.to(S,{pLift:9,duration:.4},V.turn0);tl.to(S,{pLift:0,pSmile:.45,duration:.8},V.turn1);
+tl.to(S,{pSmile:.75,duration:.8},V.arrive);
+tl.to(S,{pGest:1,duration:.7},V.arrive+.3);tl.to(S,{pGest:0,duration:.6},V.sit-.7);
+tl.to(S,{pOpen:.5,duration:.35},AL(1,.22));tl.to(S,{pOpen:.1,duration:.5},AL(1,.22)+.5);
+tl.to(S,{pSmile:.9,pOpen:.9,duration:.4},V.sit+.5);tl.to(S,{pOpen:.15,pSmile:.7,duration:.5},V.stand2-.5);
+tl.to(S,{pOpen:0,pSmile:.6,duration:.5},V.stand2+.2);
+tl.to(S,{pSmile:.1,duration:1.2},V.leave);
+tl.to(S,{pSmile:-.55,pBrow:.9,pLid:.35,pGy:2.2,duration:1.6},V.leave+1.6);
+tl.to(S,{pGx:-1,pGy:2.6,pBow:-11,duration:.6},V.cross0-.3);
+tl.to(S,{pSmile:.18,pBrow:.05,pLid:.18,pGy:0,pGx:-3.2,pBow:0,duration:2.4,ease:'sine.inOut'},V.soften);
+tl.to(S,{pSmile:.24,pLid:.12,duration:1.5},V.back);
+// --- expressions : Meera ---
+tl.to(S,{hSmile:.6,hLid:0,duration:.8},V.arrive-1.0);
+tl.to(S,{hOpen:.6,duration:.35},AL(1,.12));tl.to(S,{hOpen:.15,duration:.5},AL(1,.12)+.5);
+tl.to(S,{hSmile:.9,hOpen:.9,hHand:1,duration:.5},V.sit+.4);tl.to(S,{hHand:0,hOpen:.1,duration:.5},V.stand2-.6);
+tl.to(S,{hOpen:0,hSmile:.65,hGx:-3,duration:.5},V.stand2+.2);
+tl.to(S,{hSmile:-.05,hBrow:.2,hLid:.15,duration:.8},V.leave);
+tl.to(S,{hSmile:0,hBrow:0,hLid:.2,hGx:-1,hGy:-2.8,duration:.4},V.cross0-.2);
 
 /* ======================== per-frame procedure ======================== */
+const shEls=['shP','shH','shS'].map(id=>el('ellipse',{id,cy:0,fill:'#3a2418',filter:'url(#b4)',opacity:0},$('shadows')));
 function proc(t){
  let k=S.camK,cx=clamp(S.camX,540/k,1080-540/k),cy=clamp(S.camY,960/k,1920-960/k);
  TR('cam',`translate(540 960) scale(${k.toFixed(4)}) translate(${f1(-cx)} ${f1(-cy)})`);
@@ -466,21 +583,33 @@ function proc(t){
  A_('warmOv','opacity',f1(w*.35));A_('duskOv','opacity',f1(d*.18));
  updSea(t,sy);updShore(t);updPalms(t);updCrows(t);updDeco(t,w);
  // ----- figures -----
- const turn=sm(AN.turn0,AN.turn1,t),pre=t<AN.flash,swapK=sm(AN.swap-.3,AN.swap+.3,t),post=t>=AN.swap-.3;
- A_('standRear','opacity',f1(pre?(1-turn):0));A_('standProf','opacity',f1(pre?turn:(post?swapK:0)));
- TR('standRear',`translate(668 1548) scale(${f1(.95*(1-.34*turn))} .95)`);
- TR('standProf',`translate(664 1548) scale(${f1(.95*(.66+.34*turn))} .95)`);
- const face={smile:S.smile,lid:S.lid,brow:S.brow,gx:S.gx,gy:S.gy,browLift:S.browLift,glow:S.glow*S.phone,cheek:0};
- if(pre&&t<AN.turn1+.1)updRear(t);
- if((pre&&t>=AN.turn0-.1)||post)updProf(t,face,S.phone,S.phoneHold);
- const memo=t>=AN.flash&&t<AN.swap+.4;
- A_('seatG','opacity',memo?f1(1-swapK):0);A_('otherG','opacity',f1(S.otherA*(memo?1-swapK:0)));
- TR('seatG','translate(646 1566) scale(.82)');TR('otherG',`translate(${f1(742+Math.sin(t*.7)*1)} 1558) scale(.78)`);
- if(memo){updSeat('st_',t,{smile:S.smile,lid:S.lid,brow:S.brow,gx:S.gx,gy:S.gy,browLift:0,glow:0,cheek:0},'phone',1);
-  if(S.otherA>.01)updSeat('ot_',t,{smile:.75,lid:.12,brow:0,gx:-1.5,gy:0,browLift:0,glow:0,cheek:.15},'rest',.72)}
- const sh=$('shadows');
- sh.innerHTML=memo?`<ellipse cx="780" cy="1574" rx="${f1(230+S.otherA*50)}" ry="20" fill="#3a2418" opacity="${f1(.3*(1-swapK))}" filter="url(#b4)"/>`:`<ellipse cx="780" cy="1552" rx="${f1(150+turn*20)}" ry="16" fill="#3a2418" opacity=".3" filter="url(#b4)"/>`;
- A_('prints','opacity',f1(pre?.35:0));
+ const rearK=1-sm(V.turn0,V.turn1,t),turn=1-rearK;
+ const sitWin=sm(V.sit-.2,V.sit+.2,t)*(1-sm(V.stand2-.2,V.stand2+.2,t));
+ const recWin=sm(V.recall-.1,V.recall+.1,t)*(1-sm(V.back-.1,V.back+.1,t));
+ const seatOp=Math.max(sitWin,recWin),standOp=1-seatOp,inRecall=recWin>.01;
+ const pF={smile:S.pSmile,open:S.pOpen,lid:S.pLid,brow:S.pBrow,gx:S.pGx,gy:S.pGy,browLift:S.pLift,bow:S.pBow,cheek:0};
+ const hF={smile:S.hSmile,open:S.hOpen,lid:S.hLid,brow:S.hBrow,gx:S.hGx,gy:S.hGy,browLift:0,cheek:0};
+ const laugh={smile:.92,open:.9,lid:.05,brow:0,gx:-2,gy:0,browLift:0,cheek:.2};
+ // panda (standing / walking)
+ A_('standRear','opacity',f1(rearK*standOp));A_('panStand','opacity',f1(turn*standOp));
+ TR('standRear',`translate(${f1(S.panX-32)} 1548) scale(${f1(.95*(1-.34*turn))} .95)`);
+ TR('panStand',`translate(${f1(S.panX-36)} 1548) scale(${f1(.95*(.66+.34*turn))} .95)`);
+ if(standOp>.01){if(rearK>.01)updRear(t);if(turn>.01)updPanStand(t,pF,{walk:S.pW,phi:-S.panX*.063,gesture:S.pGest})}
+ // Meera (standing / walking) : +1 faces left, -1 faces right
+ const hDir=(t<V.stand2||t>=V.cross0-.1)?-1:1;
+ const hOn=standOp>.01&&S.herX>-230&&S.herX<1250;
+ const lane=sm(V.cross0-.5,V.cross0-.4,t)*(1-sm(V.cross1+4.8,V.cross1+5,t));const hy=lerp(1556,1428,lane),hs=lerp(.95,.8,lane);
+ A_('herStand','opacity',hOn?f1(standOp):0);TR('herStand',`translate(${f1(S.herX)} ${f1(hy)}) scale(${f1(hDir*hs)} ${f1(hs)})`);
+ if(hOn)updFemStand(t,hF,{walk:S.hW,phi:-hDir*S.herX*.055,gesture:0});
+ // seated pair
+ A_('panSeat','opacity',f1(seatOp));A_('herSeat','opacity',f1(seatOp));
+ TR('panSeat','translate(700 1566) scale(.82)');TR('herSeat','translate(505 1572) scale(.8)');
+ if(seatOp>.01){updPanSeat(t,inRecall?laugh:pF);updFemSeat(t,inRecall?laugh:hF,{hand:inRecall?1:S.hHand})}
+ // soft contact shadows
+ shEls[0].setAttribute('cx',f1(S.panX+96));shEls[0].setAttribute('cy',1552);shEls[0].setAttribute('rx',f1(150+turn*20));shEls[0].setAttribute('ry',16);shEls[0].setAttribute('opacity',f1(.3*standOp));
+ shEls[1].setAttribute('cx',f1(S.herX+60));shEls[1].setAttribute('cy',f1(hy+4));shEls[1].setAttribute('rx',110);shEls[1].setAttribute('ry',14);shEls[1].setAttribute('opacity',hOn?f1(.28*standOp):0);
+ shEls[2].setAttribute('cx',610);shEls[2].setAttribute('cy',1576);shEls[2].setAttribute('rx',330);shEls[2].setAttribute('ry',20);shEls[2].setAttribute('opacity',f1(.3*seatOp));
+ A_('prints','opacity',0);
  A_('flash','opacity',f1(S.flash));
  updCaps(t);
 }
