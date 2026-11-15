@@ -33,8 +33,11 @@
   <linearGradient id="wetG" gradientUnits="userSpaceOnUse" x1="0" y1="1400" x2="0" y2="1700"><stop offset="0" stop-color="#4a3322" stop-opacity=".62"/><stop offset=".6" stop-color="#5b4130" stop-opacity=".38"/><stop offset="1" stop-color="#6b4f3a" stop-opacity="0"/></linearGradient>
   <linearGradient id="waterOverG" gradientUnits="userSpaceOnUse" x1="0" y1="1500" x2="0" y2="1820"><stop offset="0" stop-color="#7fd6cc" stop-opacity="0"/><stop offset=".35" stop-color="#6fcfc6" stop-opacity=".46"/><stop offset="1" stop-color="#a8ece0" stop-opacity=".62"/></linearGradient>
   <linearGradient id="trunkG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a3427"/><stop offset=".5" stop-color="#2b1e18"/><stop offset="1" stop-color="#1b130f"/></linearGradient>
-  <linearGradient id="fSkinG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e0aa82"/><stop offset="1" stop-color="#b9835a"/></linearGradient>
-  <linearGradient id="fSkinG2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c99169"/><stop offset="1" stop-color="#9c6a45"/></linearGradient>
+  <linearGradient id="fSkinG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f0c59f"/><stop offset="1" stop-color="#c8916a"/></linearGradient>
+  <linearGradient id="fSkinG2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dcab84"/><stop offset="1" stop-color="#a87650"/></linearGradient>
+  <linearGradient id="kurtaG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f4c447"/><stop offset=".55" stop-color="#e2a92b"/><stop offset="1" stop-color="#b8801a"/></linearGradient>
+  <linearGradient id="jeanG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5b80b8"/><stop offset="1" stop-color="#2f4a7c"/></linearGradient>
+  <linearGradient id="jeanG2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#47689c"/><stop offset="1" stop-color="#243c66"/></linearGradient>
   <linearGradient id="sareeG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fcf3de"/><stop offset=".55" stop-color="#eee0c0"/><stop offset="1" stop-color="#cdbd98"/></linearGradient>
   <linearGradient id="sareeG2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f3e6c8"/><stop offset="1" stop-color="#bfae88"/></linearGradient>
   <linearGradient id="furG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fffdf8"/><stop offset=".6" stop-color="#ece6da"/><stop offset="1" stop-color="#d4cbbd"/></linearGradient>
@@ -262,7 +265,7 @@ function updCrows(t){crowDefs.forEach((c,i)=>{const k=(t-c.a)/(c.b-c.a);const vi
   c.o.wf.parentNode.setAttribute('transform','translate(0 2)')})}
 
 /* ======================== characters : the panda + "Meera" ======================== */
-const BLK='#17151c',GOLD='#d9a63a',HAIR='#0b0a10',BLOUSE='#1f7a5a';
+const BLK='#17151c',GOLD='#d9a63a',HAIR='#0b0a10',BLOUSE='#e2a92b';
 const rot=(p,c,a)=>{const r=a*Math.PI/180,dx=p[0]-c[0],dy=p[1]-c[1];return[c[0]+dx*Math.cos(r)-dy*Math.sin(r),c[1]+dx*Math.sin(r)+dy*Math.cos(r)]};
 function tubeD(a,b,w0,w1){const dx=b[0]-a[0],dy=b[1]-a[1];const L=Math.hypot(dx,dy)||1;const nx=-dy/L,ny=dx/L;
  return`M${f1(a[0]+nx*w0/2)} ${f1(a[1]+ny*w0/2)}L${f1(b[0]+nx*w1/2)} ${f1(b[1]+ny*w1/2)}L${f1(b[0]-nx*w1/2)} ${f1(b[1]-ny*w1/2)}L${f1(a[0]-nx*w0/2)} ${f1(a[1]-ny*w0/2)}Z`}
@@ -368,19 +371,19 @@ function updPanSeat(t,st){
 /* ---------------- MEERA (the woman) ---------------- */
 const SKIN_D='M-26 -60C-40 -52 -46 -38 -46 -24L-48 -12C-52 -2 -64 6 -66 10C-67 14 -62 17 -56 16C-54 17 -52 17 -52 18C-54 20 -56 23 -54 27C-52 29 -52 31 -50 33C-54 35 -54 38 -50 40C-50 44 -52 50 -46 56C-38 64 -22 64 -8 58L14 42C30 22 32 -20 24 -50C14 -62 -10 -66 -26 -60Z';
 function femHead(P){
- let jas='';[[24,-62],[40,-54],[52,-38],[58,-18],[60,4],[60,26],[58,48]].forEach(([x,y])=>{jas+=`<g transform="translate(${x} ${y})"><circle r="6.4" fill="#fffdf4"/><circle r="2.2" fill="#f4d673"/><path d="M-4 -4L4 4M4 -4L-4 4" stroke="#e9e2cc" stroke-width="1.3"/></g>`});
+ const jas='<path d="M-36 -46C-24 -70 8 -72 30 -56" stroke="#1f9bb0" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M-34 -44C-22 -66 6 -68 28 -54" stroke="#6fd6e4" stroke-width="1.8" fill="none" opacity=".7"/>';
  return`<g id="${P}head">
   <path id="${P}hairB" fill="${HAIR}"/>
   <path d="M-6 44L26 36L36 112L-14 112Z" fill="url(#fSkinG2)"/>
   <ellipse cx="12" cy="-2" rx="9" ry="14" fill="#c48a62"/><path d="M10 -9Q16 -3 10 4" stroke="#a86f4c" stroke-width="2" fill="none"/>
-  <circle cx="12" cy="16" r="4.4" fill="${GOLD}"/><path d="M12 19V30" stroke="${GOLD}" stroke-width="2.2"/><circle cx="12" cy="32" r="3.2" fill="${GOLD}"/>
+  <circle cx="12" cy="15" r="3.6" fill="#eef0f8"/><circle cx="12" cy="15" r="1.4" fill="#9bb0d8"/>
   <path d="${SKIN_D}" fill="url(#fSkinG)"/>
   <ellipse id="${P}cheek" cx="-30" cy="22" rx="14" ry="9" fill="#e0705f" opacity="0"/>
   <clipPath id="${P}ec"><path id="${P}ecp" d=""/></clipPath>
   <path id="${P}ew" d="" fill="#fffaf2"/><circle id="${P}ir" cx="-33" cy="-11" r="4.2" fill="#2a160e" clip-path="url(#${P}ec)"/><circle id="${P}ih" cx="-31.5" cy="-12.6" r="1.5" fill="#fff" clip-path="url(#${P}ec)"/>
   <path id="${P}lash" d="" stroke="#120b0c" stroke-width="2.8" stroke-linecap="round" fill="none"/>
   <path id="${P}brow" d="" stroke="#140d0d" stroke-width="4" stroke-linecap="round" fill="none"/>
-  <circle cx="-47" cy="-25" r="3.2" fill="#c9262e"/>
+  
   <path d="M-60 14Q-57 11 -53 14" stroke="#9a6446" stroke-width="1.7" fill="none"/>
   <path id="${P}mo" d="" fill="#5a1d26" opacity="0"/><path id="${P}teeth" d="" fill="#fffaf0" opacity="0"/>
   <path id="${P}lip" d="" stroke="#c4555d" stroke-width="5.4" stroke-linecap="round" fill="none"/>
@@ -407,7 +410,7 @@ function updFem(P,st,t){
  A_(P+'teeth','d',`M-50 28.6Q-44 ${f1(29.6-2*sm_)} -39 ${f1(28-6.4*sm_)}L-39.5 ${f1(31.5-5*sm_)}Q-44 ${f1(32.5)} -50 31.4Z`);A_(P+'teeth','opacity',op>.25?1:0);
  A_(P+'crease','d',`M-34 ${f1(cy-5)}Q-29 ${f1(cy-12)} -34 ${f1(cy-19)}`);A_(P+'crease','opacity',f1(clamp(sm_+op*.5)*.9));
  A_(P+'cheek','opacity',f1(clamp(sm_)*.5+(st.cheek||0)+op*.2));
- A_(P+'hairB','d',`M30 -60C66 -50 72 0 62 40C76 100 ${f1(70+w*12)} 170 ${f1(60+w*22)} 232C${f1(42+w*20)} 242 ${f1(24+w*14)} 214 ${f1(22+w*10)} 190C18 120 14 60 22 20Z`);
+ A_(P+'hairB','d',`M30 -60C68 -52 76 0 68 38C78 70 ${f1(76+w*8)} 104 ${f1(68+w*16)} 136C${f1(52+w*12)} 148 ${f1(30+w*9)} 128 ${f1(24+w*7)} 104C18 72 14 42 22 20Z`);
 }
 function femArmEls(P){return`<path id="${P}ua" fill="url(#fSkinG)"/><path id="${P}sl" fill="${BLOUSE}"/><path id="${P}fa" fill="url(#fSkinG)"/><circle id="${P}hand" r="12.5" fill="url(#fSkinG)"/><circle id="${P}b1" r="5" fill="none" stroke="${GOLD}" stroke-width="3"/><circle id="${P}b2" r="5" fill="none" stroke="${GOLD}" stroke-width="3"/>`}
 function updFArm(P,sh,e,w){
@@ -418,23 +421,21 @@ function updFArm(P,sh,e,w){
 }
 // standing / walking (faces left)
 $('herStand').innerHTML=`<g id="fsT"><g id="fsI">
- <path id="fs_pallB" fill="url(#sareeG2)"/>
- <path id="fs_skirt" fill="url(#sareeG)"/><path id="fs_border" fill="${GOLD}"/><path id="fs_border2" fill="none" stroke="#8a6212" stroke-width="2"/>
- <path d="M-40 -280Q-52 -170 -60 -52M-12 -280Q-14 -170 -14 -52M16 -280Q24 -170 36 -52" stroke="#cdbd98" stroke-width="2.4" fill="none" opacity=".8"/>
- <ellipse id="fs_ftF" rx="28" ry="9" fill="url(#fSkinG2)"/><ellipse id="fs_ftN" rx="28" ry="9" fill="url(#fSkinG)"/>
- <path id="fs_blouse" d="M-26 -440C14 -446 38 -420 40 -380C42 -340 36 -312 30 -296L-30 -296C-36 -340 -34 -400 -26 -440Z" fill="${BLOUSE}"/>
- <path d="M-26 -440C14 -446 38 -420 40 -380" stroke="#2a9a72" stroke-width="3" fill="none" opacity=".7"/>
- <path d="M-30 -438C-10 -420 24 -360 40 -300L28 -296C10 -350 -16 -400 -34 -430Z" fill="url(#sareeG)" stroke="${GOLD}" stroke-width="2.4"/>
+ <g id="fs_legF"><path d="M-26 -300L22 -300L19 -34L-23 -34Z" fill="url(#jeanG2)"/><path d="M-24 -52H20L19 -30H-23Z" fill="#cfdcf2"/><path d="M-6 -290Q-8 -170 -6 -60" stroke="#1d3157" stroke-width="2" fill="none" opacity=".6"/><ellipse cx="-30" cy="-12" rx="28" ry="9" fill="url(#fSkinG2)"/></g>
+ <g id="fs_legN"><path d="M-30 -300L28 -300L24 -34L-28 -34Z" fill="url(#jeanG)"/><path d="M-28 -52H24L24 -30H-28Z" fill="#e6eefb"/><path d="M-8 -290Q-12 -170 -10 -60" stroke="#2c4678" stroke-width="2" fill="none" opacity=".6"/><ellipse cx="-32" cy="-12" rx="28" ry="9" fill="url(#fSkinG)"/></g>
+ <path id="fs_kurta" fill="url(#kurtaG)"/>
+ <path id="fs_hem" fill="#b8801a" opacity=".85"/>
+ <g fill="#fff8e6" opacity=".85"><circle cx="-14" cy="-340" r="3.4"/><circle cx="12" cy="-320" r="3.4"/><circle cx="-26" cy="-290" r="3.4"/><circle cx="2" cy="-270" r="3.4"/><circle cx="26" cy="-250" r="3.4"/><circle cx="-18" cy="-236" r="3.4"/><circle cx="14" cy="-214" r="3.4"/></g>
+ <path d="M-26 -440C-12 -420 8 -418 24 -432" stroke="#b8801a" stroke-width="4" fill="none" opacity=".8"/>
  <g transform="translate(2 -520) scale(1.12)">${femHead('fs_h_')}</g>
  ${femArmEls('fs_A_')}
 </g></g>`;
 function updFemStand(t,st,o){
- const sw=Math.sin(o.phi)*o.walk,w=Math.sin(t*1.7)+.5*Math.sin(t*3.1+1),s6=sw*6;
- A_('fs_skirt','d',`M-36 -300L40 -300C54 -220 ${f1(66+s6)} -110 ${f1(70+s6)} -24L${f1(-76+s6)} -24C-64 -110 -50 -220 -36 -300Z`);
- A_('fs_border','d',`M${f1(-73+s6)} -54L${f1(69+s6)} -54L${f1(70+s6)} -24L${f1(-76+s6)} -24Z`);A_('fs_border2','d',`M${f1(-74+s6)} -44H${f1(70+s6)}`);
- A_('fs_pallB','d',`M30 -436C${f1(60+w*8)} -380 ${f1(84+w*16)} -300 ${f1(96+w*22)} -190C${f1(80+w*18)} -170 ${f1(50+w*12)} -230 40 -300Z`);
- const fx=sw*38,fl=Math.max(0,Math.cos(o.phi))*9*o.walk;
- TR('fs_ftN',`translate(${f1(-30-fx)} ${f1(-9-Math.max(0,-Math.cos(o.phi))*9*o.walk)})`);TR('fs_ftF',`translate(${f1(-30+fx)} ${f1(-9-fl)})`);
+ const sw=Math.sin(o.phi)*o.walk,w=Math.sin(t*1.7)+.5*Math.sin(t*3.1+1),a=sw*24;
+ TR('fs_legN',`rotate(${f1(a)} 0 -296)`);TR('fs_legF',`rotate(${f1(-a)} 0 -296)`);
+ const f=w*3;
+ A_('fs_kurta','d',`M-26 -440C14 -446 40 -420 44 -380C50 -320 ${f1(56+f)} -250 ${f1(64+f*1.5)} -196L${f1(-52-f)} -196C-44 -260 -36 -340 -26 -440Z`);
+ A_('fs_hem','d',`M${f1(-52-f)} -196L${f1(64+f*1.5)} -196L${f1(65+f*1.5)} -186L${f1(-53-f)} -186Z`);
  const sh=[-4,-426],swing=-sw*18;let e=[4,-350],wr=[-6,-262];
  if(o.gesture){e=[lerp(e[0],-30,o.gesture),lerp(e[1],-368,o.gesture)];wr=[lerp(wr[0],-60,o.gesture),lerp(wr[1],-340,o.gesture)+Math.sin(t*6)*4*o.gesture]}
  updFArm('fs_A_',sh,rot(e,sh,swing),rot(wr,sh,swing));
@@ -443,19 +444,19 @@ function updFemStand(t,st,o){
 }
 // seated (faces left)
 $('herSeat').innerHTML=`<g id="fq_T"><g id="fq_I">
- <path id="fq_thigh" fill="url(#sareeG)"/><path id="fq_shin" fill="url(#sareeG)"/><path id="fq_gb" fill="${GOLD}"/>
+ <path id="fq_thigh" fill="url(#jeanG)"/><path id="fq_shin" fill="url(#jeanG2)"/><path id="fq_cuff" fill="#e6eefb"/>
  <ellipse cx="-184" cy="-20" rx="30" ry="10" fill="url(#fSkinG2)"/><ellipse cx="-160" cy="-12" rx="26" ry="9" fill="url(#fSkinG)"/>
- <path d="M-24 -292C14 -296 38 -270 40 -236C44 -190 40 -140 34 -100L-30 -96C-36 -150 -34 -240 -24 -292Z" fill="${BLOUSE}"/>
- <path d="M-34 -200C0 -190 36 -180 44 -120L44 -70L-34 -70Z" fill="url(#sareeG)" opacity=".95"/>
- <path d="M-28 -290C-8 -270 22 -216 34 -150L22 -146C8 -200 -14 -250 -34 -280Z" fill="url(#sareeG)" stroke="${GOLD}" stroke-width="2.4"/>
+ <path d="M-24 -292C14 -296 40 -270 44 -230C48 -180 46 -130 44 -80L-34 -76C-40 -140 -36 -240 -24 -292Z" fill="url(#kurtaG)"/>
+ <path d="M-34 -118L54 -110L62 -62L-38 -66Z" fill="url(#kurtaG)"/><path d="M-38 -70L62 -66L62 -58L-38 -62Z" fill="#b8801a" opacity=".85"/>
+ <g fill="#fff8e6" opacity=".85"><circle cx="-10" cy="-240" r="3.2"/><circle cx="16" cy="-210" r="3.2"/><circle cx="-14" cy="-176" r="3.2"/><circle cx="20" cy="-140" r="3.2"/></g>
  <g transform="translate(-2 -352) scale(1.12)">${femHead('fq_h_')}</g>
  ${femArmEls('fq_A_')}
 </g></g>`;
 const fSeatGeom={hip:[40,-56],knee:[-74,-170],ankle:[-156,-34]};
 function updFemSeat(t,st,o){
  const g=fSeatGeom,op=st.open||0;
- A_('fq_thigh','d',tubeD([g.hip[0]+6,g.hip[1]-10],g.knee,104,92));A_('fq_shin','d',tubeD(g.knee,g.ankle,92,66));
- A_('fq_gb','d',tubeD([lerp(g.knee[0],g.ankle[0],.78),lerp(g.knee[1],g.ankle[1],.78)],g.ankle,70,64));
+ A_('fq_thigh','d',tubeD([g.hip[0]+6,g.hip[1]-10],g.knee,70,56));A_('fq_shin','d',tubeD(g.knee,g.ankle,56,44));
+ A_('fq_cuff','d',tubeD([lerp(g.knee[0],g.ankle[0],.82),lerp(g.knee[1],g.ankle[1],.82)],g.ankle,50,46));
  const sh=[2,-276],h=clamp(o.hand||0);
  const e=[lerp(-30,-26,h),lerp(-190,-250,h)],wr=[lerp(-66,-66,h),lerp(-192,-318,h)+Math.sin(t*12)*3*op*h];
  updFArm('fq_A_',sh,e,wr);

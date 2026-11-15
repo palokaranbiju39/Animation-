@@ -46,7 +46,8 @@ n1=rng.standard_normal(N).astype(np.float32)
 surf=lp(n1,500+2600*np.clip(sw,0,1.6))*(0.25+0.75*np.clip(sw,0,1.4)); surf=(surf-lp(surf,90))*.9
 breeze=lp(rng.standard_normal(N).astype(np.float32),260+160*np.sin(t_all*.45))*(0.5+0.5*np.sin(t_all*.3+1))*2.2
 SFX=np.zeros(N,np.float32); fade=np.minimum(1,t_all/.6)*np.minimum(1,(DUR-t_all)/2.0)
-SFX+=(surf*.26+breeze*.16)*fade
+BED=0.38  # background surf/breeze level (was 1.0) - reduced, not removed
+SFX+=(surf*.26+breeze*.16)*fade*BED
 # big wave
 n=int(1.6*SR);x=rng.standard_normal(n).astype(np.float32);k=np.linspace(0,1,n);place(SFX,lp(x,300+3800*k)*(k**1.6)*1.8,AN['wave']-.2,.5)
 n=int(.9*SR);cr=hp(rng.standard_normal(n).astype(np.float32),500)*np.exp(-np.arange(n)/SR*4);place(SFX,cr*1.4,AN['peak']-.1,.5)
@@ -76,12 +77,13 @@ for b in range(int(DUR/bar)+2):
         s=(np.sin(2*np.pi*f*x)+.35*np.sin(2*np.pi*f*2*x)*np.exp(-x*5)+.12*np.sin(2*np.pi*f*3*x)*np.exp(-x*9))*np.exp(-x*2.4)*np.minimum(x/.004,1)
         place(M,s.astype(np.float32)*.045*(1.15 if k%4==0 else .8),t0+k*beat/2)
 M*=swellM*np.minimum(1,t_all/2.0)*np.minimum(1,(DUR-t_all)/2.5)
+M*=0.55  # music bed level (was 1.0)
 env=np.abs(V);k=int(.12*SR);env=np.convolve(env,np.ones(k)/k,'same');env=lp(env.astype(np.float32),6)
 env=np.clip(env/(np.percentile(env,95)+1e-9),0,1)
 mix=V*1.0+M*(1-.72*env)+SFX*(1-.45*env); mix=np.tanh(mix*1.1)/1.1
 pcm=(np.clip(mix,-1,1)*32767).astype(np.int16)
 with wave.open('/tmp/ath_premix.wav','wb') as w: w.setnchannels(1);w.setsampwidth(2);w.setframerate(SR);w.writeframes(pcm.tobytes())
 out=subprocess.run(['ffmpeg','-hide_banner','-i','/tmp/ath_premix.wav','-af','loudnorm=I=-10:TP=-1.0:LRA=7:print_format=json','-f','null','-'],capture_output=True,text=True).stderr
-m=json.loads(re.search(r'\{[^{}]*"input_i"[^{}]*\}',out,re.S).group(0)); gain=-7.6-float(m['input_i'])
-subprocess.run(['ffmpeg','-y','-v','error','-i','/tmp/ath_premix.wav','-af',f"volume={gain:.2f}dB,alimiter=limit=0.84:attack=3:release=60:level=disabled",'-ar','48000','-ac','2','audio.wav'],check=True)
+m=json.loads(re.search(r'\{[^{}]*"input_i"[^{}]*\}',out,re.S).group(0)); gain=-6.3-float(m['input_i'])
+subprocess.run(['ffmpeg','-y','-v','error','-i','/tmp/ath_premix.wav','-af',f"volume={gain:.2f}dB,alimiter=limit=0.86:attack=3:release=60:level=disabled",'-ar','48000','-ac','2','audio.wav'],check=True)
 print('DUR',round(DUR,2),'premix LUFS',m['input_i'],'gain',round(gain,2))
