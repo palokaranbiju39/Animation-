@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="ml">
+<head>
+<meta charset="utf-8">
+<title>PLIX Sapling Reel</title>
+<meta name="viewport" content="width=1080">
+<style>
+  html,body{margin:0;padding:0;background:#000;overflow:hidden}
+  #stage{width:1080px;height:1920px;position:relative}
+  svg{display:block}
+  text{font-family:"Liberation Sans","DejaVu Sans",Arial,sans-serif}
+</style>
+<script src="gsap.min.js"></script>
+</head>
+<body>
+<div id="stage">
+<svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+<defs>
+  <linearGradient id="skyA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a5fb6"/><stop offset=".55" stop-color="#ff9a6a"/><stop offset="1" stop-color="#ffd9a6"/></linearGradient>
+  <linearGradient id="skyD" x1="0" y1="0" x2="0" y2="1"><stop id="sd0" offset="0" stop-color="#6a5fb6"/><stop id="sd1" offset=".6" stop-color="#ff9a6a"/><stop id="sd2" offset="1" stop-color="#ffd9a6"/></linearGradient>
+  <radialGradient id="sunGlow"><stop offset="0" stop-color="#fffbe0"/><stop offset=".18" stop-color="#ffe9a0" stop-opacity=".95"/><stop offset=".45" stop-color="#ffb860" stop-opacity=".45"/><stop offset="1" stop-color="#ff9a4a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonGlow"><stop offset="0" stop-color="#eef3ff"/><stop offset=".3" stop-color="#cfdcff" stop-opacity=".6"/><stop offset="1" stop-color="#9fb4ff" stop-opacity="0"/></radialGradient>
+  <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7ead7"/><stop offset="1" stop-color="#e6c9a6"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cf9068"/><stop offset="1" stop-color="#a86b48"/></linearGradient>
+  <linearGradient id="tealG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#68cdbd"/><stop offset=".45" stop-color="#52c0b1"/><stop offset="1" stop-color="#2e9a90"/></linearGradient>
+  <linearGradient id="capG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#efeaf0"/><stop offset="1" stop-color="#cfc8d2"/></linearGradient>
+  <linearGradient id="bulbG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fffafa"/><stop offset=".7" stop-color="#ffe6e8"/><stop offset="1" stop-color="#f3c9cf"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9784a"/><stop offset="1" stop-color="#8a5532"/></linearGradient>
+  <linearGradient id="roomG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5dcc4"/><stop offset="1" stop-color="#e2b894"/></linearGradient>
+  <linearGradient id="phoneBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2fb7a6"/><stop offset=".55" stop-color="#3f6fc4"/><stop offset="1" stop-color="#8b2a9b"/></linearGradient>
+  <linearGradient id="cBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cdeee6"/><stop offset=".5" stop-color="#f6e6ef"/><stop offset="1" stop-color="#e5c7ef"/></linearGradient>
+  <linearGradient id="grassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f9a44"/><stop offset=".5" stop-color="#4a7a35"/><stop offset="1" stop-color="#5a4130"/></linearGradient>
+  <linearGradient id="soilG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b4a33"/><stop offset="1" stop-color="#46301f"/></linearGradient>
+  <linearGradient id="shaft" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3cf" stop-opacity=".55"/><stop offset="1" stop-color="#fff3cf" stop-opacity="0"/></linearGradient>
+  <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <radialGradient id="leafL"><stop offset="0" stop-color="#8fcc62"/><stop offset="1" stop-color="#3f8a46"/></radialGradient>
+  <radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#1a0f1f" stop-opacity=".38"/></radialGradient>
+  <filter id="b2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2"/></filter>
+  <filter id="b6" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+  <filter id="b14" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+  <filter id="b40" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="40"/></filter>
+  <pattern id="noiseP" width="256" height="256" patternUnits="userSpaceOnUse"><image id="noiseImg" width="256" height="256"/></pattern>
+  <pattern id="brickP" width="150" height="70" patternUnits="userSpaceOnUse"><rect width="150" height="70" fill="none"/><path d="M0 0H150M0 35H150M0 70H150M75 0V35M0 35V70M150 35V70" stroke="#8d5636" stroke-opacity=".35" stroke-width="3" fill="none"/></pattern>
+  <clipPath id="bottleClip"><rect x="-112" y="-300" width="224" height="300" rx="30"/></clipPath>
+  <clipPath id="screenClip"><rect x="-232" y="-482" width="464" height="964" rx="56"/></clipPath>
+</defs>
+
+<rect width="1080" height="1920" fill="#111"/>
+
+<!-- ============ SCENE A : courtyard ============ -->
+<g id="cA"><g id="camA">
+  <rect width="1080" height="900" fill="url(#skyA)"/>
+  <circle id="sunA" cx="800" cy="720" r="330" fill="url(#sunGlow)"/>
+  <g id="cloudsA" filter="url(#b14)" opacity=".7"></g>
+  <g id="palmsA"></g>
+  <rect x="0" y="720" width="1080" height="700" fill="url(#wallG)"/>
+  <rect x="0" y="700" width="1080" height="34" fill="#f3dcc0"/>
+  <rect x="0" y="734" width="1080" height="12" fill="#000" opacity=".08"/>
+  <rect x="0" y="720" width="1080" height="700" fill="url(#noiseP)" opacity=".28"/>
+  <!-- door -->
+  <path d="M96 1400V960Q96 840 226 840Q356 840 356 960V1400Z" fill="#d9bd9a"/>
+  <path d="M120 1400V965Q120 868 226 868Q332 868 332 965V1400Z" fill="#3b261a"/>
+  <path d="M226 868V1400M120 1100H332" stroke="#241409" stroke-width="5" opacity=".6"/>
+  <circle cx="300" cy="1180" r="9" fill="#c9a24a"/>
+  <path d="M120 965Q120 868 226 868Q332 868 332 965" fill="none" stroke="#5a3a26" stroke-width="6"/>
+  <!-- window -->
+  <rect x="690" y="900" width="210" height="260" rx="8" fill="#d9bd9a"/>
+  <rect x="706" y="916" width="178" height="228" fill="#ffc788"/>
+  <path d="M795 916V1144M706 1030H884" stroke="#8d5636" stroke-width="7"/>
+  <rect x="690" y="1160" width="210" height="22" fill="#cda77f"/>
+  <!-- light across wall -->
+  <polygon points="560,720 1080,720 1080,1400 380,1400" fill="url(#shaft)" opacity=".5"/>
+  <!-- floor -->
+  <rect x="0" y="1400" width="1080" height="520" fill="url(#floorG)"/>
+  <rect x="0" y="1400" width="1080" height="520" fill="url(#brickP)"/>
+  <rect x="0" y="1400" width="1080" height="520" fill="url(#noiseP)" opacity=".22"/>
+  <rect x="0" y="1400" width="1080" height="26" fill="#000" opacity=".16"/>
+  <g id="dappleA" fill="#5a3320" opacity=".14" filter="url(#b6)"></g>
+  <!-- pot plant -->
+  <g id="potA" transform="translate(930 1500)">
+    <ellipse cx="0" cy="8" rx="95" ry="22" fill="#000" opacity=".18" filter="url(#b6)"/>
+    <path d="M-70 -150Q-80 -10 -52 0H52Q80 -10 70 -150Z" fill="#b8643a"/>
+    <rect x="-82" y="-176" width="164" height="38" rx="12" fill="#c8754a"/>
+    <g id="potLeaves"></g>
+  </g>
+  <g id="manShadowA"><ellipse cx="350" cy="1582" rx="150" ry="26" fill="#000" opacity=".28" filter="url(#b6)"/></g>
+  <g id="riderShadowA"><ellipse id="rShadow" cx="700" cy="1586" rx="110" ry="20" fill="#000" opacity=".25" filter="url(#b6)"/></g>
+  <g id="manA"></g>
+  <g id="riderA"></g>
+  <g id="parcelA"></g>
+  <g id="oliveA"></g>
+  <g id="birdsA" fill="none" stroke="#2b1f33" stroke-width="4" stroke-linecap="round"></g>
+  <g id="leavesA"></g>
+</g></g>
+
+<!-- ============ SCENE B : unboxing ============ -->
+<g id="cB" opacity="0"><g id="camB">
+  <rect width="1080" height="1920" fill="url(#roomG)"/>
+  <rect width="1080" height="1500" fill="url(#noiseP)" opacity=".2"/>
+  <rect x="80" y="330" width="360" height="620" rx="12" fill="#c9a888"/>
+  <rect x="98" y="348" width="324" height="584" fill="url(#skyA)"/>
+  <circle cx="330" cy="760" r="170" fill="url(#sunGlow)"/>
+  <path d="M260 348V932M98 640H422" stroke="#c9a888" stroke-width="12"/>
+  <polygon id="shaftB" points="98,348 422,348 900,1500 300,1500" fill="url(#shaft)" opacity=".5"/>
+  <g id="shelfB" transform="translate(790 640)">
+    <rect x="-150" y="0" width="300" height="20" rx="6" fill="#8a5532"/>
+    <path d="M-50 0L-62 -120H62L50 0Z" fill="#e9e0d4"/>
+    <g id="pothos"></g>
+  </g>
+  <g id="bokehB" fill="#fff" opacity=".35" filter="url(#b6)"></g>
+  <g id="manB"></g>
+  <ellipse cx="640" cy="1400" rx="380" ry="40" fill="#000" opacity=".18" filter="url(#b14)"/>
+  <!-- table -->
+  <rect x="-40" y="1380" width="1160" height="70" rx="14" fill="url(#woodG)"/>
+  <rect x="-40" y="1380" width="1160" height="12" fill="#e0a375" opacity=".55"/>
+  <rect x="20" y="1450" width="1040" height="150" fill="#7a4929"/>
+  <rect x="20" y="1450" width="1040" height="14" fill="#000" opacity=".25"/>
+  <rect x="-40" y="1600" width="1160" height="330" fill="#3d2616"/>
+  <!-- box -->
+  <g id="boxB" transform="translate(690 1395)">
+    <ellipse cx="0" cy="6" rx="190" ry="26" fill="#000" opacity=".3" filter="url(#b6)"/>
+    <g id="bottleB" transform="translate(0 -60)"></g>
+    <path d="M-170 -150L170 -150L180 0L-180 0Z" fill="#c99a62"/>
+    <path d="M-170 -150L170 -150L174 -120L-174 -120Z" fill="#000" opacity=".12"/>
+    <rect x="-34" y="-150" width="68" height="150" fill="#e6c48f" opacity=".7"/>
+    <g transform="translate(-170 -150)"><g id="flapL"><path d="M0 0L-60 -30L-48 -92L120 -92L170 0Z" fill="#dcae74" transform="translate(0 0)"/></g></g>
+    <g transform="translate(170 -150)"><g id="flapR"><path d="M0 0L60 -30L48 -92L-120 -92L-170 0Z" fill="#d6a56a"/></g></g>
+    <g id="labelB" transform="translate(-90 -70)"><rect width="84" height="46" rx="6" fill="#fff" opacity=".9"/><circle cx="20" cy="23" r="10" fill="#8b2a9b"/><rect x="38" y="14" width="38" height="6" rx="3" fill="#bbb"/><rect x="38" y="26" width="28" height="6" rx="3" fill="#ccc"/></g>
+  </g>
+  <g id="sparklesB"></g>
+</g></g>
+
+<!-- ============ SCENE C : phone ============ -->
+<g id="cC" opacity="0"><g id="camC">
+  <rect width="1080" height="1920" fill="url(#cBg)"/>
+  <g id="bokehC" filter="url(#b14)"></g>
+  <g id="phoneC" transform="translate(540 860)">
+    <rect x="-262" y="-512" width="524" height="1024" rx="78" fill="#15141c"/>
+    <rect x="-250" y="-500" width="500" height="1000" rx="68" fill="#2a2933"/>
+    <g clip-path="url(#screenClip)">
+      <rect x="-232" y="-482" width="464" height="964" fill="url(#phoneBg)"/>
+      <circle cx="-120" cy="-300" r="220" fill="#fff" opacity=".08"/>
+      <circle cx="160" cy="260" r="260" fill="#fff" opacity=".06"/>
+      <text x="0" y="-330" text-anchor="middle" font-size="124" font-weight="300" fill="#fff">6:42</text>
+      <text x="0" y="-285" text-anchor="middle" font-size="26" fill="#fff" opacity=".85">Sunday, 15 November</text>
+      <g id="card1"><rect x="-212" y="-230" width="424" height="150" rx="32" fill="#fff" opacity=".92"/>
+        <circle cx="-158" cy="-155" r="32" fill="#8b2a9b"/><text x="-158" y="-143" text-anchor="middle" font-size="38" font-weight="900" fill="#fff">P</text>
+        <text x="-110" y="-170" font-size="26" font-weight="700" fill="#2a2a33">PLIX</text><text x="190" y="-170" text-anchor="end" font-size="20" fill="#777">now</text>
+        <text x="-110" y="-128" font-size="25" fill="#333">Your order was delivered</text></g>
+      <g id="card2"><rect x="-212" y="-50" width="424" height="190" rx="32" fill="#fff" opacity=".95"/>
+        <circle cx="-158" cy="20" r="34" fill="#3b9a55"/>
+        <g id="sproutIcon" transform="translate(-158 38)"><path id="sproutStem" d="M0 0V-26" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path id="sproutL1" d="M0 -16Q-22 -18 -22 -34Q-4 -34 0 -16Z" fill="#d8f5c4"/><path id="sproutL2" d="M0 -24Q22 -26 22 -42Q4 -42 0 -24Z" fill="#fff"/></g>
+        <text x="-110" y="-4" font-size="26" font-weight="700" fill="#2a2a33">PLIX Plant a Tree</text><text x="190" y="-4" text-anchor="end" font-size="20" fill="#777">now</text>
+        <text x="-110" y="42" font-size="26" fill="#333">A sapling will be planted</text>
+        <text x="-110" y="78" font-size="26" fill="#333">for you</text>
+        <rect x="-110" y="96" width="300" height="12" rx="6" fill="#d9ead9"/><rect id="progC" x="-110" y="96" width="0" height="12" rx="6" fill="#3b9a55"/></g>
+    </g>
+    <rect x="-70" y="-474" width="140" height="36" rx="18" fill="#0b0b10"/>
+    <rect x="-262" y="-512" width="524" height="1024" rx="78" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="3"/>
+    <rect id="glareC" x="-300" y="-520" width="90" height="1040" fill="url(#shine)" opacity=".35" transform="rotate(14)"/>
+  </g>
+  <g id="manC"></g>
+  <g id="badgeC" transform="translate(790 600)"><rect x="-88" y="-34" width="176" height="68" rx="34" fill="#3b9a55"/><text x="0" y="12" text-anchor="middle" font-size="34" font-weight="800" fill="#fff">+1 tree</text></g>
+  <g id="sparklesC"></g>
+</g></g>
+
+<!-- ============ SCENE D : field ============ -->
+<g id="cD" opacity="0"><g id="camD">
+  <rect width="1080" height="1200" fill="url(#skyD)"/>
+  <g id="starsD"></g>
+  <circle id="sunD" cx="800" cy="900" r="360" fill="url(#sunGlow)"/>
+  <circle id="moonD" cx="300" cy="420" r="160" fill="url(#moonGlow)"/>
+  <circle id="moonDisc" cx="300" cy="420" r="46" fill="#f4f7ff"/>
+  <circle cx="288" cy="410" r="10" fill="#d6ddf0"/><circle cx="318" cy="436" r="7" fill="#d6ddf0"/>
+  <g id="cloudsD"></g>
+  <path d="M-20 1010Q150 930 330 985T640 975T900 960T1100 990V1100H-20Z" fill="#7aa9a0" opacity=".85"/>
+  <path d="M-20 1050Q200 985 420 1030T800 1020T1100 1040V1120H-20Z" fill="#5f9467"/>
+  <g id="palmsD"></g>
+  <!-- hut -->
+  <g transform="translate(790 1085)"><rect x="-46" y="-40" width="92" height="46" fill="#f1dcc0"/><polygon points="-62,-40 0,-92 62,-40" fill="#b24a32"/><rect x="-10" y="-26" width="22" height="32" fill="#4b2f20"/></g>
+  <rect x="0" y="1100" width="1080" height="820" fill="url(#grassG)"/>
+  <g id="rowsD" stroke="#3d6e2c" stroke-opacity=".55" fill="none"></g>
+  <rect x="0" y="1100" width="1080" height="820" fill="url(#noiseP)" opacity=".18"/>
+  <ellipse cx="540" cy="1482" rx="290" ry="74" fill="url(#soilG)"/>
+  <ellipse cx="540" cy="1482" rx="290" ry="74" fill="url(#noiseP)" opacity=".35"/>
+  <ellipse id="holeD" cx="540" cy="1476" rx="70" ry="22" fill="#2a190d" opacity="0"/>
+  <g id="grassBack"></g>
+  <g id="treeShadow"><ellipse id="tShadow" cx="610" cy="1490" rx="120" ry="26" fill="#000" opacity=".25" filter="url(#b6)"/></g>
+  <g id="treeOuter"><g id="treeG"></g></g>
+  <g id="moundD"><ellipse cx="540" cy="1484" rx="86" ry="26" fill="#5c3d26"/><ellipse cx="540" cy="1478" rx="60" ry="16" fill="#765036"/><g id="clodsD"></g></g>
+  <g id="grassFront"></g>
+  <g id="handD"></g>
+  <g id="canD"></g>
+  <g id="partD"></g>
+  <rect id="nightD" width="1080" height="1920" fill="#0a1038" opacity="0"/>
+  <g id="starsTop"></g>
+  <g id="firefliesD"></g>
+  <g id="rainD" stroke="#dbe9ff" stroke-width="3" stroke-linecap="round"></g>
+  <g id="birdsD" fill="none" stroke="#2b1f33" stroke-width="4" stroke-linecap="round"></g>
+  <g id="ripplesD" fill="none" stroke="#cfe3ff" stroke-width="2"></g>
+  <g id="bottleD" transform="translate(190 1520) scale(.34)"></g>
+</g></g>
+
+<!-- ============ SCENE E : wishlink ============ -->
+<g id="cE" opacity="0">
+  <rect width="1080" height="1920" fill="#e8741f"/>
+  <rect width="1080" height="1920" fill="url(#noiseP)" opacity=".16"/>
+  <radialGradient id="eGlow"><stop offset="0" stop-color="#ffb066" stop-opacity=".55"/><stop offset="1" stop-color="#ffb066" stop-opacity="0"/></radialGradient>
+  <circle cx="540" cy="900" r="620" fill="url(#eGlow)"/>
+  <g id="wishG" transform="translate(130 1000)" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"></g>
+  <text id="wishSub" x="500" y="1150" text-anchor="middle" font-size="34" font-weight="700" fill="#fff" opacity="0" letter-spacing="3">PLIX × WISHLINK</text>
+</g>
+
+<g id="ui"></g>
+<rect width="1080" height="1920" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script>
+/* ==================================================================
+   helpers
+   ================================================================== */
+const NS='http://www.w3.org/2000/svg';
+const E={};const $=id=>E[id]||(E[id]=document.getElementById(id));
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-clamp(t),3);
+const eio=t=>{t=clamp(t);return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2};
+const sm=(a,b,t)=>eio((t-a)/(b-a));
+function RND(seed){let s=seed;return()=>(s=(s*16807)%2147483647)/2147483647}
+function hex(c){return[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)]}
+function mixC(a,b,t){const A=hex(a),B=hex(b);return'#'+A.map((v,i)=>Math.round(lerp(v,B[i],t)).toString(16).padStart(2,'0')).join('')}
+const T=(id,tr)=>$(id).setAttribute('transform',tr);
+const A=(id,k,v)=>$(id).setAttribute(k,v);
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+const f1=v=>(+v).toFixed(1);
+
+/* noise texture generated in code */
+(function(){const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');const d=x.createImageData(256,256);const r=RND(5);
+ for(let i=0;i<65536;i++){const v=90+r()*120;d.data[i*4]=v;d.data[i*4+1]=v*.9;d.data[i*4+2]=v*.8;d.data[i*4+3]=60+r()*110}
+ x.putImageData(d,0,0);$('noiseImg').setAttribute('href',c.toDataURL())})();
+
+/* ==================================================================
+   timing — taken from the voiceover (silence detection)
+   ================================================================== */
+const TS={A:0,B:6.56,C:15.34,D:23.34,D5:28.29,D6:37.2,E:40.0,END:42.0};
+
+/* ==================================================================
+   character : same man in every scene
+   ================================================================== */
+function manSVG(P){
+  const R=RND(11);let hair='',hair2='',hl='';
+  for(let i=0;i<54;i++){const a=Math.PI+Math.PI*(i/53);const rx=66+R()*10,ry=80+R()*10;
+    hair+=`<circle cx="${f1(Math.cos(a)*rx)}" cy="${f1(-742+Math.sin(a)*ry)}" r="${f1(19+R()*11)}"/>`}
+  for(let i=0;i<46;i++){const a=Math.PI*(1.12+0.76*R());const rr=.35+R()*.65;
+    hair2+=`<circle cx="${f1(Math.cos(a)*(rr*62))}" cy="${f1(-792+Math.sin(a)*(rr*52))}" r="${f1(14+R()*10)}"/>`}
+  for(let i=0;i<26;i++){const a=Math.PI*1.1+Math.PI*0.8*R();const rr=.7+R()*.4;
+    hl+=`<circle cx="${f1(Math.cos(a)*70*rr)}" cy="${f1(-742+Math.sin(a)*88*rr-4)}" r="${f1(4+R()*5)}" fill="#3b2f27" opacity=".7"/>`}
+  const SKIN='#c68a5e',SKD='#a86d47',NAVY='#272b3a';
+  const arm=(s,id)=>`<g transform="translate(${s*112} -632)"><g id="${P}u${id}">
+      <rect x="-29" y="-14" width="58" height="176" rx="28" fill="${NAVY}"/>
+      <rect x="-29" y="-14" width="22" height="176" rx="11" fill="#3a4056" opacity=".55"/>
+      <g transform="translate(0 150)"><g id="${P}f${id}">
+        <rect x="-26" y="-6" width="52" height="46" rx="14" fill="#323850"/>
+        <rect x="-21" y="30" width="42" height="104" rx="18" fill="${SKIN}"/>
+        <rect x="-21" y="30" width="14" height="104" rx="7" fill="#e0a77a" opacity=".5"/>
+        <ellipse cx="0" cy="142" rx="25" ry="29" fill="${SKIN}"/>
+        <ellipse cx="${-s*18}" cy="132" rx="9" ry="18" fill="${SKD}" transform="rotate(${s*20} ${-s*18} 132)"/>
+        <path d="M-14 158q-2 12 4 18M-4 162q0 12 5 18M6 162q2 12 6 17" stroke="${SKD}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g></g></g></g>`;
+  return `<g id="${P}root">
+    <g id="${P}legs">
+      <path d="M-100 -338L-4 -338L-9 -14L-90 -14Z" fill="#cdb99b"/><path d="M4 -338L100 -338L90 -14L9 -14Z" fill="#c5b092"/>
+      <path d="M-100 -338L-86 -338L-80 -14L-90 -14Z" fill="#000" opacity=".08"/><path d="M-52 -250Q-56 -150 -50 -40" stroke="#a89572" stroke-width="3" fill="none" opacity=".5"/><path d="M52 -250Q56 -150 50 -40" stroke="#a89572" stroke-width="3" fill="none" opacity=".5"/>
+      <path d="M-98 -16Q-100 2 -78 2H-6Q-2 -8 -8 -16Z" fill="#3a2a20"/><path d="M98 -16Q100 2 78 2H6Q2 -8 8 -16Z" fill="#3a2a20"/></g>
+    <g id="${P}body">
+      <rect x="-24" y="-700" width="48" height="60" fill="${SKD}"/>
+      <path d="M-120 -640Q-125 -560 -112 -330L112 -330Q125 -560 120 -640Q60 -668 0 -662Q-60 -668 -120 -640Z" fill="${NAVY}"/>
+      <path d="M-54 -656Q0 -640 54 -656L42 -330L-42 -330Z" fill="#efe9df"/>
+      <path d="M-54 -656Q0 -640 54 -656Q40 -640 0 -626Q-40 -640 -54 -656Z" fill="#cdc6bb"/>
+      <path d="M-120 -640L-54 -656L-44 -330L-112 -330Q-125 -560 -120 -640Z" fill="${NAVY}"/>
+      <path d="M120 -640L54 -656L44 -330L112 -330Q125 -560 120 -640Z" fill="#2c3042"/>
+      <path d="M-54 -660L-8 -634L-30 -596L-76 -636Z" fill="#323750"/><path d="M54 -660L8 -634L30 -596L76 -636Z" fill="#323750"/>
+      <rect x="-96" y="-568" width="48" height="58" rx="5" fill="#222633"/><rect x="48" y="-568" width="48" height="58" rx="5" fill="#222633"/>
+      <rect x="-96" y="-568" width="48" height="16" rx="4" fill="#30354a"/><rect x="48" y="-568" width="48" height="16" rx="4" fill="#30354a"/>
+      <circle cx="-72" cy="-538" r="5" fill="#8b8fa3"/><circle cx="72" cy="-538" r="5" fill="#8b8fa3"/>
+      <path d="M-120 -640Q-60 -668 0 -662" fill="none" stroke="#475070" stroke-width="3" opacity=".6"/>
+      <g id="${P}head">
+        <ellipse cx="-60" cy="-742" rx="10" ry="17" fill="${SKD}"/><ellipse cx="60" cy="-742" rx="10" ry="17" fill="${SKD}"/>
+        <ellipse cx="0" cy="-742" rx="60" ry="74" fill="${SKIN}"/>
+        <ellipse cx="-22" cy="-760" rx="30" ry="40" fill="#e3a678" opacity=".35"/>
+        <path d="M-4 -748Q-12 -728 -8 -722Q0 -716 8 -722Q12 -728 4 -748" fill="none" stroke="${SKD}" stroke-width="3.5" stroke-linecap="round" opacity=".7"/>
+        <ellipse id="${P}blushL" cx="-38" cy="-722" rx="15" ry="9" fill="#e07a6a" opacity="0"/><ellipse id="${P}blushR" cx="38" cy="-722" rx="15" ry="9" fill="#e07a6a" opacity="0"/>
+        <path d="M-60 -750C-62 -690 -40 -646 0 -644C40 -646 62 -690 60 -750C52 -735 46 -722 38 -712C22 -700 12 -706 0 -704C-12 -706 -22 -700 -38 -712C-46 -722 -52 -735 -60 -750Z" fill="#1a1411"/>
+        <path d="M-32 -712C-18 -726 -6 -717 0 -715C6 -717 18 -726 32 -712C20 -703 8 -704 0 -706C-8 -704 -20 -703 -32 -712Z" fill="#1a1411"/>
+        <g id="${P}mouth">
+          <g id="${P}mN"><path d="M-12 -689Q0 -685 12 -689" stroke="#b86a6a" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+          <g id="${P}mH" opacity="0"><path d="M-20 -692Q0 -666 20 -692Q0 -686 -20 -692Z" fill="#fff" stroke="#8a3a3a" stroke-width="3" stroke-linejoin="round"/></g>
+          <g id="${P}mS" opacity="0"><path d="M-12 -682Q0 -692 12 -682" stroke="#b86a6a" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+          <g id="${P}mO" opacity="0"><ellipse cx="0" cy="-685" rx="9" ry="11" fill="#6b2a2a"/></g>
+          <g id="${P}mD" opacity="0"><path d="M-14 -688H14" stroke="#b86a6a" stroke-width="5" stroke-linecap="round"/></g>
+        </g>
+        <g id="${P}eL" transform="translate(-26 -750)"><g id="${P}eLs"><ellipse rx="12" ry="8" fill="#fff"/><circle id="${P}pL" r="5.4" fill="#2a1a10"/><circle cx="1.6" cy="-1.8" r="1.6" fill="#fff"/></g></g>
+        <g id="${P}eR" transform="translate(26 -750)"><g id="${P}eRs"><ellipse rx="12" ry="8" fill="#fff"/><circle id="${P}pR" r="5.4" fill="#2a1a10"/><circle cx="1.6" cy="-1.8" r="1.6" fill="#fff"/></g></g>
+        <g transform="translate(-27 -770)"><path id="${P}bL" d="M-17 3Q-2 -7 17 -2" stroke="#150f0c" stroke-width="7.5" fill="none" stroke-linecap="round"/></g>
+        <g transform="translate(27 -770)"><path id="${P}bR" d="M-17 -2Q2 -7 17 3" stroke="#150f0c" stroke-width="7.5" fill="none" stroke-linecap="round"/></g>
+        <g fill="#16110e">${hair}${hair2}</g>${hl}
+      </g>
+      ${arm(-1,'L')}${arm(1,'R')}
+    </g>
+  </g>`;
+}
+const EXPR={ // brow rot (left), brow y, mouth, eye squint, blush
+  neutral:{br:0,by:0,m:'N',es:1,bl:0},
+  happy:{br:-5,by:-4,m:'H',es:.72,bl:.55},
+  sad:{br:-16,by:2,m:'S',es:.95,bl:0},
+  determined:{br:15,by:5,m:'D',es:.9,bl:0},
+  surprised:{br:-6,by:-11,m:'O',es:1.15,bl:0}
+};
+function face(P,name,t,look){
+  const x=EXPR[name];
+  T(P+'bL',`translate(0 ${x.by}) rotate(${x.br} 0 0)`);
+  T(P+'bR',`translate(0 ${x.by}) rotate(${-x.br} 0 0)`);
+  ['N','H','S','O','D'].forEach(k=>$(P+'m'+k).setAttribute('opacity',k===x.m?1:0));
+  const bl=(((t+P.length*.7)%3.4)<.13)?.08:1; const es=Math.min(x.es,1.4)*bl;
+  T(P+'eLs',`scale(1 ${f1(es)})`);T(P+'eRs',`scale(1 ${f1(es)})`);
+  A(P+'blushL','opacity',x.bl);A(P+'blushR','opacity',x.bl);
+  const lx=look||0;A(P+'pL','cx',lx);A(P+'pR','cx',lx);
+}
+function pose(P,uL,fL,uR,fR){T(P+'uL',`rotate(${uL})`);T(P+'fL',`rotate(${fL})`);T(P+'uR',`rotate(${uR})`);T(P+'fR',`rotate(${fR})`)}
+function breathe(P,t,amp=3){T(P+'body',`translate(0 ${f1(Math.sin(t*2.1)*amp)})`);T(P+'head',`translate(0 ${f1(Math.sin(t*2.1+.6)*amp*.5)}) rotate(${f1(Math.sin(t*.9)*1.2)} 0 -690)`)}
+
+$('manA').innerHTML=`<g id="manAT">${manSVG('a_')}</g>`;
+$('manB').innerHTML=`<g id="manBT" transform="translate(290 1900) scale(1.12)">${manSVG('b_')}</g>`;
+$('manC').innerHTML=`<g id="manCT" transform="translate(540 2070)">${manSVG('c_')}</g>`;
+$('c_legs').setAttribute('opacity',0);$('b_legs').setAttribute('opacity',0);
+
+/* ==================================================================
+   delivery rider (side view, faces left)
+   ================================================================== */
+$('riderA').innerHTML=`<g id="riderT"><g id="riderB">
+  <g id="rLegBack"><rect x="-17" y="0" width="34" height="296" rx="15" fill="#232733"/><path d="M-20 286h46q8 8 -2 14h-44z" fill="#111"/></g>
+  <g id="rLegFront"><rect x="-17" y="0" width="34" height="296" rx="15" fill="#2b3040"/><path d="M-20 286h46q8 8 -2 14h-44z" fill="#1a1a1a"/></g>
+  <g id="rTorso"><rect x="-40" y="-580" width="80" height="290" rx="34" fill="#f2b632"/><rect x="-40" y="-580" width="80" height="36" rx="18" fill="#d99a1c"/>
+    <circle cx="6" cy="-480" r="20" fill="#8b2a9b"/><text x="6" y="-472" text-anchor="middle" font-size="24" font-weight="900" fill="#fff">P</text>
+    <rect x="-40" y="-330" width="80" height="14" fill="#c8841a" opacity=".5"/></g>
+  <g id="rHead"><rect x="-12" y="-610" width="26" height="40" fill="#7e4d32"/><circle cx="0" cy="-640" r="42" fill="#8f5a3a"/>
+    <path d="M-46 -648Q-44 -700 4 -700Q46 -698 44 -648Q10 -660 -46 -648Z" fill="#f2b632"/><path d="M-46 -648Q-78 -646 -76 -634Q-44 -634 -34 -640Z" fill="#d99a1c"/>
+    <circle cx="-20" cy="-636" r="4.5" fill="#1b1210"/><path d="M-26 -618Q-16 -608 -4 -618" stroke="#4a2a1c" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M-18 -652l-14 -4" stroke="#1b1210" stroke-width="4" stroke-linecap="round"/></g>
+  <g transform="translate(-6 -530)"><g id="rArm"><rect x="-17" y="-10" width="34" height="116" rx="17" fill="#e0a52a" transform="rotate(-70)"/>
+     <ellipse cx="-96" cy="88" rx="20" ry="18" fill="#8f5a3a"/><path d="M0 0Q-60 50 -92 84" stroke="#e0a52a" stroke-width="34" stroke-linecap="round" fill="none"/></g></g>
+  <g id="rWave" transform="translate(-4 -540)" opacity="0"><path d="M0 0Q-40 -50 -70 -120" stroke="#e0a52a" stroke-width="34" stroke-linecap="round" fill="none"/><circle cx="-74" cy="-134" r="22" fill="#8f5a3a"/></g>
+</g></g>`;
+$('parcelA').innerHTML=`<g id="parcelT"><rect x="-84" y="-60" width="168" height="124" rx="8" fill="#c99a62"/><path d="M-84 -60L-60 -84H108L84 -60Z" fill="#dcae74"/><path d="M84 -60L108 -84V40L84 64Z" fill="#a97d4a"/>
+  <rect x="-16" y="-60" width="32" height="124" fill="#e8c993" opacity=".8"/><rect x="-66" y="-30" width="48" height="34" rx="4" fill="#fff"/><circle cx="-50" cy="-13" r="9" fill="#8b2a9b"/><rect x="-36" y="-22" width="14" height="5" rx="2" fill="#aaa"/><rect x="-36" y="-12" width="10" height="5" rx="2" fill="#ccc"/></g>`;
+
+/* ==================================================================
+   palms, olive tree, grass
+   ================================================================== */
+function palm(parent,x,y,h,lean,seed,fill,idp){
+  const R=RND(seed);const g=el('g',{transform:`translate(${x} ${y})`},parent);
+  const tx=lean,ty=-h;
+  el('path',{d:`M-10 0Q${tx*.1} ${ty*.5} ${tx-4} ${ty}L${tx+6} ${ty}Q${tx*.2+14} ${ty*.5} 14 0Z`,fill:'#2a2030'},g);
+  for(let i=1;i<14;i++){const k=i/14;el('path',{d:`M${lerp(-10,tx-4,k)*1} ${ty*k}h${lerp(24,10,k)}`,stroke:'#150d18','stroke-width':2,opacity:.5},g)}
+  const crown=el('g',{id:idp+'crown',transform:`translate(${tx} ${ty})`},g);
+  for(let i=0;i<9;i++){const a=-170+i*(160/8)+R()*8;const L=170+R()*70;const d=`M0 0Q${L*.5} ${-L*.28} ${L} ${L*.2}`;
+    const fg=el('g',{transform:`rotate(${a+90-90})`,'data-a':a},crown);
+    fg.setAttribute('transform',`rotate(${a}) `);
+    // frond drawn pointing +x, rotated by a
+    el('path',{d,stroke:fill,'stroke-width':26,'stroke-dasharray':'3 5',fill:'none',opacity:.95},fg);
+    el('path',{d,stroke:fill,'stroke-width':5,fill:'none'},fg);}
+  return crown;
+}
+function bez(p0,p1,p2,p3,t){const u=1-t;return[u*u*u*p0[0]+3*u*u*t*p1[0]+3*u*t*t*p2[0]+t*t*t*p3[0],u*u*u*p0[1]+3*u*u*t*p1[1]+3*u*t*t*p2[1]+t*t*t*p3[1]]}
+const palmsAc=[palm($('palmsA'),120,760,420,40,3,'#2a4a2e','pa1'),palm($('palmsA'),960,770,520,-50,8,'#243f2a','pa2'),palm($('palmsA'),560,740,300,22,5,'#355a36','pa3')];
+const palmsDc=[palm($('palmsD'),90,1090,300,36,21,'#24472c','pd1'),palm($('palmsD'),985,1095,380,-40,25,'#1f3e27','pd2'),palm($('palmsD'),930,1080,240,-20,28,'#2c5233','pd3')];
+palmsAc.concat(palmsDc).forEach((c,i)=>c.dataset.ph=i*1.7);
+
+/* olive tree overhead (scene A foreground) */
+(function(){const R=RND(41);const g=$('oliveA');
+  const grp=el('g',{id:'oliveG'},g);
+  const brs=[[[-40,-20],[120,160],[250,260],[420,330]],[[-40,60],[100,200],[200,420],[330,520]],[[40,-30],[200,60],[330,150],[560,200]],[[180,150],[260,190],[330,330],[300,470]]];
+  brs.forEach((b,bi)=>{
+    el('path',{d:`M${b[0]} C${b[1]} ${b[2]} ${b[3]}`,stroke:'#4a3a2c','stroke-width':bi<2?34:20,fill:'none','stroke-linecap':'round'},grp);
+    el('path',{d:`M${b[0]} C${b[1]} ${b[2]} ${b[3]}`,stroke:'#7a6450','stroke-width':bi<2?10:6,fill:'none','stroke-linecap':'round',opacity:.7,transform:'translate(-5 -4)'},grp);
+  });
+  brs.forEach((b,bi)=>{for(let i=0;i<46;i++){const t=.18+R()*.85;const [x,y]=bez(b[0],b[1],b[2],b[3],Math.min(t,1));
+    const a=R()*360;const lf=el('ellipse',{cx:0,cy:0,rx:30+R()*12,ry:6+R()*3,fill:R()<.5?'#8fa27c':'#6f8760',opacity:.95,transform:`translate(${f1(x+(R()-.5)*80)} ${f1(y+(R()-.5)*70)}) rotate(${f1(a)})`},grp);}});
+})();
+(function(){const R=RND(77);const g=$('potLeaves');
+  for(let i=0;i<22;i++){const a=-100+R()*200;const L=90+R()*90;
+    el('path',{d:`M0 -170Q${f1(Math.sin(a*Math.PI/180)*L*.4)} ${f1(-170-L*.6)} ${f1(Math.sin(a*Math.PI/180)*L)} ${f1(-170-Math.cos(a*Math.PI/180)*L)}`,stroke:R()<.5?'#3e7a3a':'#5a9a46','stroke-width':10,fill:'none','stroke-linecap':'round'},g)}
+})();
+(function(){const R=RND(5);
+  const d=$('dappleA');for(let i=0;i<30;i++)el('ellipse',{cx:R()*1080,cy:760+R()*1000,rx:40+R()*60,ry:26+R()*40,'data-s':R()},d);
+  const c=$('cloudsA');for(let i=0;i<5;i++)el('ellipse',{cx:R()*1080,cy:200+R()*400,rx:180+R()*160,ry:28+R()*20,fill:i%2?'#ffd0a0':'#ffb98a','data-s':R()},c);
+  const l=$('leavesA');for(let i=0;i<14;i++)el('ellipse',{rx:14,ry:5,fill:R()<.5?'#7f9a62':'#a8b88a','data-s':R()},l);
+  const b=$('birdsA');for(let i=0;i<5;i++)el('path',{d:'M-16 0Q-8 -10 0 0Q8 -10 16 0','data-s':R()},b);
+  const bb=$('birdsD');for(let i=0;i<6;i++)el('path',{d:'M-16 0Q-8 -10 0 0Q8 -10 16 0','data-s':R()},bb);
+  const p=$('pothos');for(let i=0;i<14;i++){const x=-40+R()*80,len=60+R()*200;el('path',{d:`M${x} -120Q${x+(R()-.5)*60} ${-60+len*.3} ${x+(R()-.5)*40} ${-110+len}`,stroke:'#3d7a40','stroke-width':6,fill:'none'},p);
+     for(let k=1;k<4;k++)el('ellipse',{cx:x+(R()-.5)*30,cy:-110+len*k/4,rx:16,ry:9,fill:k%2?'#4f9a4a':'#3a8a44',transform:`rotate(${R()*60-30})`},p)}
+  const bo=$('bokehB');for(let i=0;i<14;i++)el('circle',{cx:R()*1080,cy:300+R()*900,r:20+R()*40,'data-s':R()},bo);
+  const bc=$('bokehC');const cols=['#ffffff','#9fe3d4','#f3c6ff','#ffd9a6'];for(let i=0;i<16;i++)el('circle',{cx:R()*1080,cy:R()*1700,r:40+R()*90,fill:cols[i%4],opacity:.35,'data-s':R()},bc);
+  const s=$('starsTop');for(let i=0;i<60;i++)el('circle',{cx:R()*1080,cy:R()*820,r:1.5+R()*2.5,fill:'#fff','data-s':R()},s);
+  const ff=$('firefliesD');for(let i=0;i<22;i++)el('circle',{r:4,fill:'#fff3a0','data-s':R()},ff);
+  const cd=$('cloudsD');for(let i=0;i<7;i++){const g=el('g',{'data-s':R(),'data-y':160+R()*520},cd);for(let k=0;k<5;k++)el('ellipse',{cx:k*70-140,cy:(k%2)*-14,rx:90+R()*40,ry:44+R()*14,fill:'#ffffff'},g)}
+  const rd=$('rainD');for(let i=0;i<110;i++)el('line',{'data-s':R(),'data-x':R()*1200-60,'data-l':50+R()*40,'data-p':R()},rd);
+  const rp=$('ripplesD');for(let i=0;i<10;i++)el('ellipse',{'data-s':R(),cx:150+R()*780,cy:1250+R()*560},rp);
+  // field rows & grass
+  const rows=$('rowsD');for(let i=-6;i<=14;i++){el('path',{d:`M${540+(i-4)*40} 1100L${540+(i-4)*300} 1920`,'stroke-width':3},rows)}
+  const gb=$('grassBack'),gf=$('grassFront');
+  for(let i=0;i<80;i++){const x=R()*1080,y=1130+R()*360;const h=18+R()*26;const gr=el('path',{d:`M${x} ${y}Q${x+4} ${y-h*.6} ${x+(R()-.5)*14} ${y-h}`,stroke:R()<.5?'#3f7d33':'#5ea443','stroke-width':3,fill:'none','stroke-linecap':'round','data-s':R()},gb)}
+  for(let i=0;i<70;i++){const x=R()*1080,y=1540+R()*380;const h=40+R()*70;el('path',{d:`M${x} ${y}Q${x+8} ${y-h*.6} ${x+(R()-.5)*30} ${y-h}`,stroke:R()<.5?'#356d2c':'#6bb64a','stroke-width':5,fill:'none','stroke-linecap':'round','data-s':R()},gf)}
+  for(let i=0;i<22;i++){const x=R()*1080,y=1560+R()*340;const gg=el('g',{transform:`translate(${x} ${y})`},gf);el('line',{x1:0,y1:0,x2:0,y2:-50,stroke:'#3f7d33','stroke-width':3},gg);const c=['#ffd24a','#ff8fa3','#ffffff'][i%3];for(let k=0;k<5;k++)el('ellipse',{cx:Math.cos(k*1.256)*8,cy:-52+Math.sin(k*1.256)*8,rx:6,ry:4,fill:c,transform:`rotate(${k*72} ${Math.cos(k*1.256)*8} ${-52+Math.sin(k*1.256)*8})`},gg);el('circle',{cx:0,cy:-52,r:4,fill:'#e08b1c'},gg)}
+  // stars scene D sky already via starsTop
+})();
+
+/* ==================================================================
+   bottle (product, drawn in code)
+   ================================================================== */
+function rosemary(R,x,y,len,ang,leaf){
+  let s=`<g transform="translate(${x} ${y}) rotate(${ang})"><path d="M0 0Q4 ${-len*.5} 0 ${-len}" stroke="#5d6b3a" stroke-width="5" fill="none"/>`;
+  for(let i=0;i<30;i++){const k=i/30;const yy=-len*k-4;const L=(leaf*(1-k*.45))*(.75+R()*.5);
+    for(const sd of[-1,1]){s+=`<path d="M0 ${yy.toFixed(1)}l${(sd*L).toFixed(1)} ${(-L*.75).toFixed(1)}" stroke="${R()<.5?'#3f6a2a':'#567f36'}" stroke-width="${(4.2-k*1.8).toFixed(1)}" stroke-linecap="round"/>`}}
+  return s+`<path d="M0 ${-len}l-8 -26M0 ${-len}l8 -22" stroke="#567f36" stroke-width="3.5" stroke-linecap="round"/></g>`;
+}
+function bottleSVG(id){
+  const R=RND(91);
+  return `<g id="${id}">
+   <g id="${id}disc"><circle cx="-30" cy="-340" r="250" fill="#8fe1c4" opacity=".55"/><circle cx="-30" cy="-340" r="250" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/><path d="M168 -420q14 24 4 40q-18 -8 -4 -40z" fill="#fff" opacity=".8"/></g>
+   <ellipse cx="0" cy="8" rx="150" ry="22" fill="#000" opacity=".3" filter="url(#b6)"/>
+   <rect x="-112" y="-300" width="224" height="300" rx="30" fill="url(#tealG)"/>
+   <g clip-path="url(#bottleClip)">
+     <rect x="-100" y="-290" width="30" height="270" rx="15" fill="#fff" opacity=".22"/>
+     <rect x="70" y="-290" width="22" height="270" rx="11" fill="#000" opacity=".1"/>
+     <g opacity=".5">${rosemary(R,-100,-20,230,-4,22)}</g>
+     <g opacity=".55">${rosemary(R,104,-30,200,8,20)}</g>
+     <rect id="${id}shine" x="-200" y="-300" width="70" height="300" fill="url(#shine)" transform="skewX(-14)"/>
+   </g>
+   <rect x="-82" y="-366" width="164" height="76" rx="10" fill="url(#capG)"/>
+   <rect x="-82" y="-366" width="164" height="12" rx="6" fill="#fff" opacity=".7"/>
+   <rect x="-40" y="-520" width="80" height="170" rx="40" fill="url(#bulbG)"/>
+   <rect x="-26" y="-504" width="12" height="120" rx="6" fill="#fff" opacity=".8"/>
+   <g text-anchor="middle">
+     <text x="0" y="-205" font-size="94" font-weight="900" fill="#8b2a9b" stroke="#8b2a9b" stroke-width="7" stroke-linejoin="round" letter-spacing="-5">PLiX</text>
+     <text x="86" y="-262" font-size="13" fill="#2c5a52">The Plant Fix</text>
+     <text x="0" y="-160" font-size="31" font-weight="800" fill="#17443b">Rosemary Hair</text>
+     <text x="0" y="-126" font-size="31" font-weight="800" fill="#17443b">Growth</text>
+     <text x="0" y="-98" font-size="20" font-weight="700" fill="#1e4a42">Advanced Serum</text>
+     <text x="0" y="-70" font-size="14" fill="#1e4a42">3% Redensyl | AnaGain | Baicapil</text>
+     <text x="0" y="-48" font-size="14" font-weight="700" fill="#1e4a42">Boosts hair growth &amp; reduces hair fall</text>
+     <text x="0" y="-22" font-size="11" fill="#1e4a42">For all hair types · Net Volume: 30ml | 1.0 fl oz</text>
+   </g>
+   <g>${rosemary(R,150,-8,300,10,34)}${rosemary(R,128,-6,240,-6,30)}</g>
+  </g>`;
+}
+$('bottleB').innerHTML=bottleSVG('bt');
+$('bottleD').innerHTML=bottleSVG('bd');
+
+/* ==================================================================
+   the tree (grows from the planted sapling)
+   ================================================================== */
+const treeClusters=[];
+(function(){const R=RND(123);const g=$('treeG');
+  // trunk + branches (draw-on)
+  const paths=[
+   ['M0 6C-6 -110 8 -240 0 -380','#5a3d2b',58,0],['M0 6C-6 -110 8 -240 0 -380','#7b5640',16,-12],
+   ['M2 -330C-30 -420 -110 -480 -180 -560','#5a3d2b',30,.5],['M-2 -350C30 -440 100 -470 160 -550','#5a3d2b',28,.55],['M0 -370C-6 -470 8 -560 10 -640','#5a3d2b',26,.6],
+   ['M-90 -460C-130 -480 -200 -470 -240 -500','#5a3d2b',14,.7],['M90 -450C130 -470 190 -450 240 -480','#5a3d2b',14,.72]];
+  paths.forEach((p,i)=>{const e=el('path',{d:p[0],stroke:p[1],'stroke-width':p[2],fill:'none','stroke-linecap':'round',id:'tp'+i},g);e.dataset.th=p[3]});
+  el('path',{d:'M-46 8Q-30 -20 -26 -80L26 -80Q30 -20 46 8Z',fill:'#5a3d2b'},g);
+  // canopy clusters
+  const cg=el('g',{id:'canopy'},g);
+  for(let i=0;i<30;i++){const a=R()*Math.PI*2,rr=Math.sqrt(R());const cx=Math.cos(a)*rr*320,cy=-560+Math.sin(a)*rr*210-(R()*20);
+    const r=70+R()*60;const dist=Math.hypot(cx/320,(cy+560)/210);
+    const c=el('g',{transform:`translate(${f1(cx)} ${f1(cy)})`},cg);c.dataset.th=(.06+dist*.78).toFixed(3);c.dataset.cx=f1(cx);c.dataset.cy=f1(cy);
+    const inner=el('g',{},c);
+    el('circle',{r:r,fill:'#2e6b3a'},inner);el('circle',{cx:-r*.12,cy:-r*.14,r:r*.82,fill:'#3f8a46'},inner);el('circle',{cx:-r*.28,cy:-r*.3,r:r*.5,fill:'url(#leafL)'},inner);
+    for(let k=0;k<12;k++){const aa=R()*6.28,d=r*(.55+R()*.45);el('ellipse',{cx:f1(Math.cos(aa)*d),cy:f1(Math.sin(aa)*d),rx:13+R()*7,ry:5+R()*2,fill:R()<.5?'#a6d96d':'#275c33',opacity:.85,transform:`rotate(${f1(aa*57)} ${f1(Math.cos(aa)*d)} ${f1(Math.sin(aa)*d)})`},inner)}
+    treeClusters.push(c);}
+  treeClusters.sort((a,b)=>a.dataset.th-b.dataset.th);
+  treeClusters.forEach(c=>cg.appendChild(c)); // keep painter order but pop by threshold
+})();
+function setTree(s,sway,tt){
+  // s: scale 0.14..1
+  $('treeG').setAttribute('transform',`scale(${f1(s*100)/100})`);
+  const prog=clamp((s-.1)/.9);
+  document.querySelectorAll('#treeG path[id^=tp]').forEach(p=>{const th=+p.dataset.th;const L=p.getTotalLength?p.getTotalLength():600;
+     const k=th===0?1:clamp((s-th*.5)/(.35));p.setAttribute('stroke-dasharray',L);p.setAttribute('stroke-dashoffset',f1(L*(1-k)))});
+  treeClusters.forEach((c,i)=>{const th=+c.dataset.th;const k=eo((s-th*.9+.08)/.14);const sw=Math.sin(tt*1.6+i)*3;
+     c.firstChild.setAttribute('transform',`translate(${f1(sw)} ${f1(Math.sin(tt*1.3+i*.7)*2)}) scale(${f1(Math.max(.001,k))})`);});
+}
+
+/* ==================================================================
+   hand, trowel, watering can (scene D planting)
+   ================================================================== */
+$('handD').innerHTML=`<g id="handT"><g id="handR">
+  <rect x="-34" y="-520" width="68" height="340" rx="34" fill="#b89a6a"/><rect x="-34" y="-520" width="22" height="340" rx="11" fill="#d1b887" opacity=".6"/>
+  <rect x="-30" y="-200" width="60" height="44" rx="12" fill="#a68858"/>
+  <rect x="-24" y="-170" width="48" height="150" rx="20" fill="#c68a5e"/><rect x="-24" y="-170" width="15" height="150" rx="8" fill="#e0a77a" opacity=".5"/>
+  <ellipse cx="0" cy="-6" rx="30" ry="34" fill="#c68a5e"/>
+  <g id="trowelG"><rect x="-8" y="6" width="16" height="64" rx="8" fill="#6a4529"/><path d="M-6 66L6 66L26 128Q0 160 -26 128Z" fill="#c9d1d8"/><path d="M-4 70L0 70L-6 140Q-18 130 -16 126Z" fill="#fff" opacity=".6"/></g>
+  <path d="M-26 -2q-4 10 2 16M-10 6q-1 12 4 16M6 6q3 12 8 15" stroke="#a86d47" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="-26" cy="-12" rx="11" ry="18" fill="#c68a5e" transform="rotate(20 -26 -12)"/>
+</g></g>`;
+$('canD').innerHTML=`<g id="canT"><g id="canR">
+  <path d="M-80 -40Q-90 60 -70 90H70Q90 60 80 -40Z" fill="#3f9bb0"/><path d="M-80 -40Q-90 60 -70 90H-40Q-60 40 -50 -40Z" fill="#6fcbdc" opacity=".6"/>
+  <ellipse cx="0" cy="-40" rx="80" ry="16" fill="#2a7a8c"/><ellipse cx="0" cy="-42" rx="66" ry="11" fill="#1c4f5c"/>
+  <path d="M70 40L230 -40" stroke="#3f9bb0" stroke-width="22" stroke-linecap="round"/><path d="M214 -48L248 -64L256 -40L222 -26Z" fill="#2a7a8c"/><ellipse cx="248" cy="-52" rx="10" ry="18" fill="#1c4f5c" transform="rotate(25 248 -52)"/>
+  <path d="M-70 -30Q-160 -20 -130 70Q-120 90 -76 70" stroke="#2a7a8c" stroke-width="16" fill="none" stroke-linecap="round"/>
+</g></g>`;
+(function(){const p=$('partD');for(let i=0;i<26;i++)el('circle',{r:6+i%4*2,fill:i%3?'#5c3d26':'#7a5236','data-s':i/26},p);
+  for(let i=0;i<30;i++)el('ellipse',{rx:4,ry:7,fill:'#9fe3ff',opacity:.9,'data-s':i/30,'data-k':'w'},p);
+  const c=$('clodsD');for(let i=0;i<9;i++)el('circle',{cx:-70+i*17,cy:1484-1484+ (i%2?2:-3)+0,r:7+i%3*3,fill:'#6b4a33'},c)})();
+
+/* ==================================================================
+   wishlink end card (drawn with strokes)
+   ================================================================== */
+(function(){const g=$('wishG');const P=[
+ 'M0 -86C6 12 44 6 52 -62C56 -88 60 -88 66 -78C72 -40 70 6 96 4C124 2 130 -60 136 -88',         // w
+ 'M168 -88V0','M178 -64M168 -88',                                                                    // i stem
+ 'M276 -84C250 -100 214 -84 224 -60C232 -42 280 -50 282 -22C284 4 238 10 214 -6',                    // s
+ 'M318 -170V0M318 -44C322 -92 370 -100 386 -70C394 -50 390 -20 390 0',                             // h
+ 'M444 -170C420 -120 430 -40 450 0C458 14 478 8 470 -10',                                           // l (looped)
+ 'M504 -88V0','M556 -88V0M556 -48C560 -92 606 -98 620 -68C626 -50 622 -20 622 0',                  // i n
+ 'M666 -170V0M740 -88L672 -34M690 -52L748 0'];                                                      // k
+ P.forEach(d=>el('path',{d,class:'wl','pathLength':1,'stroke-dasharray':1,'stroke-dashoffset':1},g));
+ el('circle',{cx:168,cy:-132,r:11,fill:'#fff',stroke:'none',class:'wd'},g);el('circle',{cx:504,cy:-132,r:11,fill:'#fff',stroke:'none',class:'wd'},g);
+})();
+
+/* ==================================================================
+   UI chips (inside Instagram-safe area : y 250-345, x 60-940)
+   ================================================================== */
+const CHIPS=[
+ [3.3,6.3,'Your PLIX order has arrived'],
+ [7.3,14.8,'Rosemary Hair Growth Serum'],
+ [16.6,23.0,'Every order plants a sapling'],
+ [23.9,27.3,'Planting your sapling'],
+ [28.8,36.6,'Growing, day by day'],
+ [37.4,39.8,'Your order. Your tree.']];
+CHIPS.forEach((c,i)=>{const g=el('g',{id:'chip'+i,opacity:0},$('ui'));
+  const r=el('rect',{x:0,y:-38,height:76,rx:38,fill:'#ffffff',opacity:.94},g);
+  el('circle',{cx:0,cy:0,r:11,fill:'#8b2a9b',id:'chipd'+i},g);
+  const t=el('text',{x:0,y:12,'font-size':37,'font-weight':800,fill:'#2b2133'},g);t.textContent=c[2];
+  const w=t.getComputedTextLength();const W=w+86;r.setAttribute('width',W);r.setAttribute('x',-W/2);
+  t.setAttribute('x',-W/2+58);A('chipd'+i,'cx',-W/2+32);g.dataset.w=W});
+function chips(t){CHIPS.forEach((c,i)=>{const a=eo((t-c[0])/.45)*(1-eo((t-(c[1]-.35))/.35));
+  const g=$('chip'+i);g.setAttribute('opacity',f1(a));g.setAttribute('transform',`translate(500 ${f1(300+(1-eo((t-c[0])/.45))*-26)})`)})}
+
+/* ==================================================================
+   state driven by the GSAP timeline
+   ================================================================== */
+const S={opA:1,kA:1,cxA:540,cyA:960,rX:1000,walk:1,rFlip:1,box:0,boxShow:1,hug:0,wave:0,rGive:0,
+ opB:0,kB:1,cxB:540,cyB:960,flaps:0,botY:0,botS:.2,botShow:0,disc:0,shine:0,boxGlow:0,
+ opC:0,kC:1,cxC:540,cyC:960,phone:0,n1:0,n2:0,sprout:0,prog:0,badge:0,
+ opD:0,kD:2.2,cxD:620,cyD:1380,hole:0,mound:0,hx:900,hy:1000,hr:30,trowel:1,hshow:1,tDY:-230,tDX:0,treeS:.2,treeShow:0,canX:1500,canY:700,canR:0,water:0,wet:0,
+ opE:0,wish:0,sub:0,gTime:0};
+
+const tl=gsap.timeline({paused:true,defaults:{ease:'power2.inOut'}});
+/* ---- SCENE A (0 – 6.56) ---- */
+tl.to(S,{rX:660,duration:2.4,ease:'none'},0);
+tl.to(S,{walk:0,duration:.4},2.4);
+tl.to(S,{rGive:1,duration:.6},2.5);
+tl.to(S,{box:1,duration:1.0,ease:'power2.inOut'},3.2);
+tl.to(S,{hug:1,duration:.6},3.9);
+tl.to(S,{wave:1,duration:.3},4.6);
+tl.to(S,{rFlip:-1,wave:0,walk:1,duration:.01},5.2);
+tl.to(S,{rX:1400,duration:2.2,ease:'none'},5.2);
+tl.fromTo(S,{kA:1,cxA:540,cyA:960},{kA:1.2,cxA:452,cyA:1108,duration:6.4,ease:'power1.inOut',immediateRender:false},0.2);
+tl.to(S,{opB:1,duration:.4},6.2);tl.to(S,{opA:0,duration:.01},6.62);
+/* ---- SCENE B (6.56 – 15.34) ---- */
+tl.fromTo(S,{kB:1.25,cxB:560,cyB:1150},{kB:1,cxB:540,cyB:960,duration:1.2,ease:'power3.out',immediateRender:false},6.45);
+tl.to(S,{flaps:1,duration:.5,ease:'back.out(2)'},7.2);
+tl.to(S,{botShow:1,duration:.01},7.4);
+tl.to(S,{botY:300,botS:1.0,duration:1.5,ease:'back.out(1.3)'},7.5);
+tl.to(S,{disc:1,duration:.9},7.6);
+tl.to(S,{boxGlow:1,duration:.6},7.5);
+tl.to(S,{kB:1.85,cxB:700,cyB:900,duration:2.6,ease:'power2.inOut'},10.0);
+tl.to(S,{shine:1,duration:1.4,ease:'power1.inOut'},11.3);
+tl.to(S,{kB:1.35,cxB:640,cyB:1000,duration:1.8,ease:'power2.inOut'},13.4);
+tl.to(S,{opC:1,duration:.4},14.95);tl.to(S,{opB:0,duration:.01},15.37);
+/* ---- SCENE C (15.34 – 23.34) ---- */
+tl.fromTo(S,{phone:0},{phone:1,duration:1.1,ease:'back.out(1.4)',immediateRender:false},15.3);
+tl.fromTo(S,{n1:0},{n1:1,duration:.55,ease:'back.out(1.6)',immediateRender:false},16.9);
+tl.fromTo(S,{n2:0},{n2:1,duration:.55,ease:'back.out(1.6)',immediateRender:false},18.8);
+tl.to(S,{sprout:1,duration:1.4,ease:'power1.out'},19.4);
+tl.to(S,{prog:1,duration:2.4,ease:'power1.inOut'},19.6);
+tl.fromTo(S,{kC:1,cxC:540,cyC:960},{kC:1.12,cxC:540,cyC:900,duration:3,ease:'power2.inOut',immediateRender:false},19.0);
+tl.fromTo(S,{badge:0},{badge:1,duration:.6,ease:'back.out(2.4)',immediateRender:false},21.8);
+tl.to(S,{opD:1,duration:.4},22.95);tl.to(S,{opC:0,duration:.01},23.37);
+/* ---- SCENE D planting (23.34 – 28.29) ---- */
+tl.fromTo(S,{kD:2.5,cxD:640,cyD:1340},{kD:2.3,cxD:600,cyD:1380,duration:4.9,ease:'none',immediateRender:false},23.2);
+tl.fromTo(S,{hx:960,hy:900,hr:34},{hx:640,hy:1370,hr:20,duration:.7,ease:'power2.out',immediateRender:false},23.3);
+tl.to(S,{hy:1420,hr:14,duration:.28,yoyo:true,repeat:1},24.0);
+tl.to(S,{hole:1,duration:1.0},24.0);
+tl.to(S,{hx:1120,hy:900,hr:40,duration:.5,ease:'power2.in'},24.85);
+tl.to(S,{trowel:0,duration:.01},24.9);
+tl.fromTo(S,{hx:700,hy:700,hr:8},{hx:572,hy:1230,hr:6,duration:.01,immediateRender:false},25.35);
+tl.to(S,{treeShow:1,duration:.01},25.35);
+tl.fromTo(S,{tDY:-300,tDX:20},{tDY:0,tDX:0,duration:1.0,ease:'power2.inOut',immediateRender:false},25.35);
+tl.to(S,{hy:1420,duration:1.0,ease:'power2.inOut'},25.35);
+tl.to(S,{mound:1,duration:.7},26.2);
+tl.to(S,{hx:640,hy:1470,hr:14,duration:.25,yoyo:true,repeat:3},26.35);
+tl.to(S,{hx:1150,hy:900,hr:40,duration:.5,ease:'power2.in'},27.4);
+tl.fromTo(S,{canX:1380,canY:820,canR:0},{canX:700,canY:1090,canR:-10,duration:.7,ease:'power2.out',immediateRender:false},26.9);
+tl.to(S,{canR:-34,water:1,duration:.4},27.45);
+tl.to(S,{wet:1,duration:.9},27.5);
+/* ---- SCENE D growth (28.29 – 37.2) ---- */
+tl.to(S,{kD:1,cxD:540,cyD:960,duration:2.2,ease:'power2.inOut'},28.3);
+tl.to(S,{canX:1500,canY:700,duration:.6},28.1);
+tl.to(S,{treeS:.28,duration:1.5},28.3);tl.to(S,{treeS:.38,duration:1.4},29.8);tl.to(S,{treeS:.58,duration:2.2},31.2);
+tl.to(S,{treeS:.82,duration:2.0},33.4);tl.to(S,{treeS:.97,duration:1.8},35.4);tl.to(S,{treeS:1,duration:3.0,ease:'none'},37.2);
+tl.to(S,{kD:1.06,cxD:540,cyD:1000,duration:3.2,ease:'power1.inOut'},36.9);
+tl.to(S,{opE:1,duration:.5},39.6);tl.to(S,{opD:0,duration:.01},40.12);
+/* ---- SCENE E wishlink (40 – 42) ---- */
+tl.fromTo(S,{wish:0},{wish:1,duration:1.1,ease:'power2.inOut',immediateRender:false},39.95);
+tl.fromTo(S,{sub:0},{sub:1,duration:.5,immediateRender:false},41.0);
+tl.to({}, {duration:.01},TS.END);
+
+/* ==================================================================
+   per-frame procedure : pure function of S (timeline) and t
+   ================================================================== */
+const camT=(id,k,cx,cy)=>T(id,`translate(540 960) scale(${k.toFixed(4)}) translate(${-cx.toFixed(1)} ${-cy.toFixed(1)})`);
+function mixKey(keys,t){let i=0;while(i<keys.length-1&&t>keys[i+1][0])i++;const a=keys[i],b=keys[Math.min(i+1,keys.length-1)];const k=a===b?0:sm(a[0],b[0],t);return[a,b,k]}
+const SKY=[ // t, top, mid, bottom, sunX,sunY,sunA, moonA, starA, night, cloud, rain
+ [23,'#6a5fb6','#ff9a6a','#ffd9a6',800,920,1,0,0,0,0,0],
+ [28.3,'#6a5fb6','#ff9a6a','#ffd9a6',810,960,1,0,0,0,0,0],
+ [29.4,'#2f2a66','#c0527a','#ff9a66',830,1110,.8,0,.1,.12,0,0],
+ [30.2,'#0b1030','#17235a','#2a3a7a',830,1200,0,1,1,.38,0,0],
+ [31.1,'#0b1030','#17235a','#2a3a7a',830,1200,0,1,1,.38,.4,0],
+ [31.7,'#4c5766','#6e7a89','#98a3ad',830,1200,0,0,0,.08,1,1],
+ [33.1,'#58626f','#7d8896','#a8b2bb',830,1200,0,0,0,.05,1,1],
+ [33.9,'#6fb4e6','#b4e2ff','#ffeec9',160,1060,.9,0,0,0,.3,0],
+ [35.4,'#4aa8ee','#9ad8ff','#fff3d0',540,560,1,0,0,0,.2,0],
+ [36.9,'#5aa6e0','#ffbf8a','#ffe2b0',700,640,1,0,0,0,.1,0],
+ [38.5,'#6a5fb6','#ff9a6a','#ffd9a6',790,880,1,0,0,0,0,0],
+ [42,'#6a5fb6','#ff9a6a','#ffd9a6',800,920,1,0,0,0,0,0]];
+function skyState(t){const [a,b,k]=mixKey(SKY,t);return{top:mixC(a[1],b[1],k),mid:mixC(a[2],b[2],k),bot:mixC(a[3],b[3],k),sx:lerp(a[4],b[4],k),sy:lerp(a[5],b[5],k),sa:lerp(a[6],b[6],k),ma:lerp(a[7],b[7],k),sta:lerp(a[8],b[8],k),night:lerp(a[9],b[9],k),cl:lerp(a[10],b[10],k),rain:lerp(a[11],b[11],k)}}
+const EXA=[[0,'neutral'],[1.4,'surprised'],[2.4,'happy'],[5.8,'happy']];
+function exprAt(tab,t){let r=tab[0][1];for(const e of tab)if(t>=e[0])r=e[1];return r}
+const EXB=[[6.56,'surprised'],[8.0,'happy'],[10.4,'happy'],[13.6,'happy']];
+const EXC=[[15.34,'neutral'],[17.0,'surprised'],[19.0,'neutral'],[20.1,'surprised'],[21.0,'happy']];
+
+function sceneA(t){
+  camT('camA',S.kA,S.cxA,S.cyA);
+  const sk=1;A('sunA','cx',f1(800+Math.sin(t*.3)*6));
+  document.querySelectorAll('#cloudsA ellipse').forEach(e=>{const s=+e.dataset.s;e.setAttribute('transform',`translate(${f1(((s*1500+t*22)%1500)-250-(+e.getAttribute('cx')))} 0)`)});
+  palmsAc.forEach(c=>c.setAttribute('transform',`translate(${c.getAttribute('transform').match(/translate\(([-\d.]+) ([-\d.]+)\)/).slice(1,3).join(' ')}) rotate(${f1(Math.sin(t*1.1+ +c.dataset.ph)*2.2)})`));
+  A('oliveG','transform',`rotate(${f1(Math.sin(t*1.2)*1.4)} -40 -20)`);
+  document.querySelectorAll('#dappleA ellipse').forEach(e=>{const s=+e.dataset.s;e.setAttribute('transform',`translate(${f1(Math.sin(t*.8+s*9)*40)} ${f1(Math.cos(t*.6+s*7)*14)})`)});
+  document.querySelectorAll('#potLeaves path').forEach((p,i)=>p.setAttribute('transform',`rotate(${f1(Math.sin(t*1.8+i)*2.2)} 0 -170)`));
+  document.querySelectorAll('#birdsA path').forEach((p,i)=>{const s=+p.dataset.s;const x=((t*(90+i*18)+s*1400)%1500)-200;const y=190+i*58+Math.sin(t*1.3+i*2)*24+s*40;const fl=Math.sin(t*(9+i)+i)*9;
+     p.setAttribute('d',`M-16 ${f1(fl*.6)}Q-8 ${f1(-10-fl)} 0 0Q8 ${f1(-10-fl)} 16 ${f1(fl*.6)}`);p.setAttribute('transform',`translate(${f1(x)} ${f1(y)}) scale(${1.5-i*.12})`)});
+  document.querySelectorAll('#leavesA ellipse').forEach((e,i)=>{const s=+e.dataset.s;const x=((s*1200+t*(34+i*3)+Math.sin(t+i)*40)%1300)-100;const y=((s*2000+t*(70+i*5))%1900)-60;e.setAttribute('transform',`translate(${f1(x)} ${f1(y)}) rotate(${f1(t*90+i*40)})`)});
+  // man
+  const mx=360,my=1585,ms=.88;T('manAT',`translate(${mx} ${my}) scale(${ms})`);
+  const hug=eio(S.hug);const rec=S.rGive*(1-S.box);
+  const uL=lerp(lerp(2,-38,S.rGive),24,hug),fL=lerp(lerp(2,-70,S.rGive),-82,hug),uR=lerp(lerp(-2,38,S.rGive),-24,hug),fR=lerp(lerp(-2,70,S.rGive),82,hug);
+  pose('a_',uL,fL,uR,fR);breathe('a_',t,3);face('a_',exprAt(EXA,t),t,t<2.6?5:2);
+  // rider
+  const rs=.8;const walk=S.walk;const ph=t*9;
+  T('riderT',`translate(${f1(S.rX)} 1585) scale(${S.rFlip*rs} ${rs})`);
+  T('riderB',`translate(0 ${f1(-Math.abs(Math.sin(ph))*10*walk)})`);
+  T('rLegFront',`translate(0 -300) rotate(${f1(Math.sin(ph)*26*walk)})`);T('rLegBack',`translate(0 -300) rotate(${f1(-Math.sin(ph)*26*walk)})`);
+  const gaveBox=S.box>=1;
+  $('rArm').setAttribute('opacity',(gaveBox||S.wave>.5)?0:1);$('rWave').setAttribute('opacity',(S.wave>.5)?1:0);
+  T('rWave',`translate(-4 -540) rotate(${f1(Math.sin(t*10)*14)})`);
+  A('rShadow','cx',f1(S.rX));A('riderShadowA','opacity',S.rX>1300?0:1);
+  // parcel
+  const boxRiderX=S.rX-S.rFlip*88*rs, boxRiderY=1585-.8*430;
+  const bx=lerp(boxRiderX,mx,eio(S.box)),by=lerp(boxRiderY,1190+Math.sin(t*2.1)*3,eio(S.box))-Math.sin(Math.PI*S.box)*40;
+  const bs=lerp(.82,.95,S.box);
+  T('parcelT',`translate(${f1(bx)} ${f1(by)}) scale(${bs})`);
+  A('parcelT','opacity',1);
+}
+function sceneB(t){
+  camT('camB',S.kB,S.cxB,S.cyB);
+  A('shaftB','opacity',f1(.4+Math.sin(t*.9)*.08));
+  document.querySelectorAll('#bokehB circle').forEach(e=>{const s=+e.dataset.s;e.setAttribute('transform',`translate(${f1(Math.sin(t*.4+s*8)*30)} ${f1(Math.cos(t*.5+s*6)*26)})`);e.setAttribute('opacity',f1(.18+.18*Math.sin(t*.9+s*9)))});
+  document.querySelectorAll('#pothos path').forEach((p,i)=>p.setAttribute('transform',`rotate(${f1(Math.sin(t*1.4+i)*2)} ${p.getAttribute('d').split(/[ MQ]/)[1]} -120)`));
+  const ex=exprAt(EXB,t);const look=t<7.4?0:6;
+  breathe('b_',t,3);face('b_',ex,t,look);
+  const reach=eio((t-6.8)/.5)*(1-eio((t-8.6)/.8));
+  pose('b_',lerp(6,10,reach),-8,-6,-8);
+  T('flapL',`rotate(${f1(-S.flaps*110)})`);T('flapR',`rotate(${f1(S.flaps*110)})`);
+  A('labelB','opacity',S.flaps>.2?0:1);
+  // bottle
+  const bs=S.botS;const by=-60-S.botY*(1)+Math.sin(t*1.8)*(S.botShow*6);
+  $('bottleB').setAttribute('opacity',S.botShow);
+  T('bottleB',`translate(0 ${f1(by+ (1-S.botShow)*0)}) scale(${f1(bs*100)/100}) rotate(${f1(Math.sin(t*1.2)*1.8)})`);
+  A('btdisc','opacity',S.disc);T('btdisc',`translate(-30 -340) scale(${f1(.3+.7*S.disc)}) translate(30 340)`);
+  T('btshine',`translate(${f1(lerp(0,520,S.shine))} 0) skewX(-14)`);
+  // sparkles
+  const sp=$('sparklesB');if(!sp.firstChild){for(let i=0;i<14;i++){el('path',{d:'M0 -14L3 -3L14 0L3 3L0 14L-3 3L-14 0L-3 -3Z',fill:'#fff6c0','data-s':i/14},sp)}}
+  [...sp.children].forEach((p,i)=>{const s=+p.dataset.s;const lt=((t-7.6)*.8+s)%1;const a=s*6.28*3;const rr=120+lt*220;
+     const x=640+Math.cos(a)*rr*.9,y=900+Math.sin(a)*rr*.9;const vis=(t>7.6&&t<14.5)?Math.sin(lt*Math.PI):0;
+     p.setAttribute('transform',`translate(${f1(x)} ${f1(y)}) scale(${f1(vis*1.2)}) rotate(${f1(lt*120)})`);p.setAttribute('opacity',f1(vis))});
+}
+function sceneC(t){
+  camT('camC',S.kC,S.cxC,S.cyC);
+  document.querySelectorAll('#bokehC circle').forEach(e=>{const s=+e.dataset.s;e.setAttribute('transform',`translate(${f1(Math.sin(t*.35+s*8)*40)} ${f1(((s*2000+t*30)%2000)-100-(+e.getAttribute('cy')))})`)});
+  const py=lerp(1100,0,eo(S.phone));T('phoneC',`translate(540 ${f1(860+py)}) rotate(${f1(Math.sin(t*.8)*1.2-(1-S.phone)*6)})`);
+  T('card1',`translate(0 ${f1(-(1-eo(S.n1))*320)})`);A('card1','opacity',f1(clamp(S.n1*1.5)));
+  T('card2',`translate(0 ${f1(-(1-eo(S.n2))*420)})`);A('card2','opacity',f1(clamp(S.n2*1.5)));
+  // sprout grows
+  const sp=eo(S.sprout);A('sproutStem','d',`M0 0V${f1(-30*sp)}`);T('sproutL1',`translate(0 ${f1(-30*sp*.6)}) scale(${f1(sp)})`);T('sproutL2',`translate(0 ${f1(-30*sp*.8)}) scale(${f1(sp)})`);
+  A('progC','width',f1(300*S.prog));
+  A('glareC','x',f1(-300+((t*140)%900)));
+  const b=S.badge;T('badgeC',`translate(790 ${f1(600-b*10)}) scale(${f1(b)})`);
+  // man at bottom looking at phone
+  const rise=eo(S.phone);const mt=lerp(300,0,rise);T('manCT',`translate(540 ${f1(2260+mt)}) scale(1.0)`);
+  breathe('c_',t,3);face('c_',exprAt(EXC,t),t,0);
+  const hold=eo(S.phone);pose('c_',lerp(2,6,hold),lerp(2,-14,hold),lerp(-2,-6,hold),lerp(-2,14,hold));
+  const sp2=$('sparklesC');if(!sp2.firstChild){for(let i=0;i<10;i++)el('path',{d:'M0 -14L3 -3L14 0L3 3L0 14L-3 3L-14 0L-3 -3Z',fill:'#fff','data-s':i/10},sp2)}
+  [...sp2.children].forEach((p,i)=>{const s=+p.dataset.s;const lt=((t-19)*.7+s)%1;const a=s*6.28*2;const x=540+Math.cos(a)*330,y=700+Math.sin(a)*380;const v=(t>19.2&&t<23)?Math.sin(lt*Math.PI):0;p.setAttribute('transform',`translate(${f1(x)} ${f1(y)}) scale(${f1(v*1.1)})`);p.setAttribute('opacity',f1(v))});
+}
+function sceneD(t){
+  camT('camD',S.kD,S.cxD,S.cyD);
+  const sk=skyState(t);A('sd0','stop-color',sk.top);A('sd1','stop-color',sk.mid);A('sd2','stop-color',sk.bot);
+  const sunBob=Math.sin(t*.4)*4;A('sunD','cx',f1(sk.sx));A('sunD','cy',f1(sk.sy+sunBob));A('sunD','opacity',f1(sk.sa));
+  const mx=300+Math.sin(t*.2)*10,my=lerp(520,400,clamp((t-29.6)/1.2));A('moonD','cx',f1(mx));A('moonD','cy',f1(my));A('moonDisc','cx',f1(mx));A('moonDisc','cy',f1(my));A('moonD','opacity',f1(sk.ma));A('moonDisc','opacity',f1(sk.ma));
+  document.querySelectorAll('#starsTop circle').forEach(e=>{const s=+e.dataset.s;e.setAttribute('opacity',f1(sk.sta*(.4+.6*Math.abs(Math.sin(t*2+s*20)))))});
+  A('nightD','opacity',f1(sk.night));
+  document.querySelectorAll('#cloudsD g').forEach(g=>{const s=+g.dataset.s;const x=((s*1500+t*26)%1700)-300;g.setAttribute('transform',`translate(${f1(x)} ${f1(+g.dataset.y)})`);g.setAttribute('opacity',f1(sk.cl*.9));g.setAttribute('fill',mixC('#ffffff','#7b8591',sk.rain))});
+  document.querySelectorAll('#cloudsD ellipse').forEach(e=>e.setAttribute('fill',mixC('#ffffff','#6b7480',sk.rain)));
+  palmsDc.forEach((c,i)=>{const m=c.getAttribute('transform').match(/translate\(([-\d.]+) ([-\d.]+)\)/);c.setAttribute('transform',`translate(${m[1]} ${m[2]}) rotate(${f1(Math.sin(t*1.1+ +c.dataset.ph)*2.4+(sk.rain*Math.sin(t*5+i)*1.5))})`)});
+  document.querySelectorAll('#grassBack path,#grassFront path').forEach(p=>{const s=+p.dataset.s;p.setAttribute('transform',`skewX(${f1(Math.sin(t*1.5+s*12)*4+sk.rain*Math.sin(t*6+s*9)*3)})`)});
+  // rain
+  const rain=sk.rain;document.querySelectorAll('#rainD line').forEach(l=>{const s=+l.dataset.s;const L=+l.dataset.l;const y=((s*2200+t*1500*(0.7+ +l.dataset.p*.6))%2100)-120;const x=+l.dataset.x+y*.12;
+     l.setAttribute('x1',f1(x));l.setAttribute('y1',f1(y));l.setAttribute('x2',f1(x-L*.12));l.setAttribute('y2',f1(y+L));l.setAttribute('opacity',f1(rain*.55))});
+  document.querySelectorAll('#ripplesD ellipse').forEach(e=>{const s=+e.dataset.s;const lt=((t*1.4+s*5)%1);e.setAttribute('rx',f1(lt*34));e.setAttribute('ry',f1(lt*10));e.setAttribute('opacity',f1(rain*(1-lt)*.8))});
+  document.querySelectorAll('#firefliesD circle').forEach(c=>{const s=+c.dataset.s;const a=sk.night>.2?1:0;c.setAttribute('cx',f1(540+Math.sin(t*.7+s*30)*430));c.setAttribute('cy',f1(1300+Math.cos(t*.9+s*20)*260));c.setAttribute('opacity',f1(a*(.3+.7*Math.abs(Math.sin(t*2.4+s*20)))))});
+  // birds near the end
+  document.querySelectorAll('#birdsD path').forEach((p,i)=>{const s=+p.dataset.s;const a=clamp((t-34.6)/1)*(t<40.2?1:0);const x=((t-34.6)*(110+i*14)+s*500)%1400-150;const y=330+i*70+Math.sin(t*1.4+i*2)*26;const fl=Math.sin(t*(9+i)+i)*9;
+     p.setAttribute('d',`M-16 ${f1(fl*.6)}Q-8 ${f1(-10-fl)} 0 0Q8 ${f1(-10-fl)} 16 ${f1(fl*.6)}`);p.setAttribute('transform',`translate(${f1(x)} ${f1(y)}) scale(${1.6-i*.1})`);p.setAttribute('opacity',a)});
+  // hole & mound & tree
+  A('holeD','opacity',f1(S.hole*(1-S.mound*0)));A('holeD','rx',f1(30+S.hole*52));A('holeD','ry',f1(9+S.hole*16));
+  const ms=eio(S.mound);T('moundD',`translate(540 1486) scale(${f1(ms)}) translate(-540 -1486)`);$('moundD').setAttribute('opacity',ms>.01?1:0);
+  A('treeOuter','opacity',S.treeShow);
+  if(t>=25.35&&t<26.4){S.hx=540+S.tDX+20;S.hy=1478+S.tDY-34;S.hr=4}
+  T('treeOuter',`translate(${f1(540+S.tDX)} ${f1(1478+S.tDY)})`);
+  setTree(S.treeS,1,t);
+  A('tShadow','rx',f1(30+S.treeS*220));A('tShadow','cx',f1(540+30+S.treeS*80));A('tShadow','opacity',f1(S.treeShow*.28*(1-sk.rain*.6)*(1-sk.night*1.2)));
+  // hand
+  const hs=S.hshow;const handVis=(t<24.95)||(t>=25.3&&t<27.5)?1:0;
+  const hv=(t>=23.3&&t<25.4)||(t>=25.35&&t<27.9)?1:0;
+  A('handD','opacity',hv);T('handT',`translate(${f1(S.hx)} ${f1(S.hy)})`);T('handR',`rotate(${f1(S.hr)})`);A('trowelG','opacity',S.trowel);
+  // soil particles
+  const pp=$('partD');
+  [...pp.children].forEach((p,i)=>{const s=+p.dataset.s;
+    if(p.dataset.k==='w'){const lt=(( (t-27.6)*1.3+s*3)%1);const on=(t>27.55&&t<28.4)?1:0;
+      const sx=700+248*Math.cos(0)-30,sy=1090-70; // spout end approx
+      p.setAttribute('cx',f1(sx-10+Math.sin(s*50)*8));p.setAttribute('cy',f1(sy+lt*330));p.setAttribute('opacity',f1(on*(1-lt*.2)))}
+    else{const dig=(t>24.0&&t<25.0)?1:0;const lt=((t-24)*1.6+s*2)%1;const a=s*6.28;p.setAttribute('cx',f1(540+Math.cos(a)*70*lt+ (i%2?60:-60)*lt));p.setAttribute('cy',f1(1470-Math.sin(lt*3.14)*140-lt*10+60*lt*lt));p.setAttribute('opacity',f1(dig*(1-lt)))}});
+  // watering can
+  T('canT',`translate(${f1(S.canX)} ${f1(S.canY)})`);T('canR',`rotate(${f1(S.canR)})`);A('canD','opacity',(t>26.8&&t<28.7)?1:0);
+  // wet soil darkening
+  // product bottle
+  const bs=eo((t-38.2)/.8);const bFloat=Math.sin(t*1.8)*6;$('bottleD').setAttribute('opacity',f1(bs));
+  T('bottleD',`translate(210 ${f1(1500+bFloat-(1-bs)*60)}) scale(${f1(.5*(.6+.4*bs))})`);
+  // sparkle tick on planting (shine ring)
+}
+function sceneE(t){
+  const w=S.wish;document.querySelectorAll('#wishG .wl').forEach((p,i)=>{const a=clamp(w*10-i)/1;p.setAttribute('stroke-dashoffset',f1(1-clamp(w*9.5-i*.9)))});
+  document.querySelectorAll('#wishG .wd').forEach(d=>d.setAttribute('opacity',clamp(w*3-1.6)));
+  const sc=1+.03*Math.sin(t*1.3);T('wishG',`translate(${f1(540-405*sc)} ${f1(1000)}) scale(${f1(sc)})`);
+  A('wishSub','opacity',S.sub);
+}
+
+function proc(t){
+  S.gTime=t;
+  A('cA','opacity',S.opA);A('cB','opacity',S.opB);A('cC','opacity',S.opC);A('cD','opacity',S.opD);A('cE','opacity',S.opE);
+  if(S.opA>.001)sceneA(t);
+  if(S.opB>.001)sceneB(t);
+  if(S.opC>.001)sceneC(t);
+  if(S.opD>.001)sceneD(t);
+  if(S.opE>.001)sceneE(t);
+  chips(t);
+}
+window.DURATION=TS.END;
+window.seek=function(t){t=Math.max(0,Math.min(TS.END,t));tl.time(t,false);proc(t);return t};
+window.TS=TS;
+window.seek(0);
+</script>
+</body>
+</html>
